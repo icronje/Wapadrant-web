@@ -1,17 +1,31 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, Calendar, Mic, Megaphone, MessageSquare, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, Calendar, Mic, Megaphone, MessageSquare, Settings, LogOut, Images, FileText, Newspaper } from "lucide-react"
+import { headers } from "next/headers"
 
 interface AdminLayoutProps {
   children: React.ReactNode
 }
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const session = await auth()
+  const headersList = await headers()
+  const pathname = headersList.get("x-pathname") || ""
+  
+  // Skip auth check for login page
+  const isLoginPage = pathname === "/admin/login"
+  
+  let session = null
+  if (!isLoginPage) {
+    session = await auth()
+    if (!session?.user) {
+      redirect("/admin/login")
+    }
+  }
 
-  if (!session?.user) {
-    redirect("/admin/login")
+  // Login page renders without sidebar
+  if (isLoginPage) {
+    return <div className="min-h-screen bg-gray-50">{children}</div>
   }
 
   const navItems = [
@@ -19,19 +33,19 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     { href: "/admin/gebeurtenisse", label: "Gebeurtenisse", icon: Calendar },
     { href: "/admin/preke", label: "Preke", icon: Mic },
     { href: "/admin/aankondigings", label: "Aankondigings", icon: Megaphone },
+    { href: "/admin/nuusbriewe", label: "Nuusbriewe", icon: Newspaper },
+    { href: "/admin/foto-albums", label: "Foto Albums", icon: Images },
     { href: "/admin/boodskappe", label: "Boodskappe", icon: MessageSquare },
     { href: "/admin/instellings", label: "Instellings", icon: Settings },
   ]
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200">
+      <aside className="w-64 bg-white border-r border-gray-200 fixed h-full overflow-y-auto">
         <div className="p-6">
           <h1 className="text-xl font-bold text-gray-900">Wapadrant Admin</h1>
-          <p className="text-sm text-gray-500 mt-1">{session.user.name || session.user.email}</p>
+          <p className="text-sm text-gray-500 mt-1">{session?.user?.name || session?.user?.email}</p>
         </div>
-
         <nav className="mt-6 px-3">
           {navItems.map((item) => {
             const Icon = item.icon
@@ -47,8 +61,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             )
           })}
         </nav>
-
-        <div className="absolute bottom-6 left-0 right-0 px-3">
+        <div className="mt-6 px-3">
           <form action="/api/auth/signout" method="POST">
             <button
               type="submit"
@@ -60,9 +73,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
           </form>
         </div>
       </aside>
-
-      {/* Main content */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 ml-64 p-8">
         {children}
       </main>
     </div>
