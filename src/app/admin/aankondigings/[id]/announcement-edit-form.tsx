@@ -142,7 +142,7 @@ export function AnnouncementEditForm({
           </p>
         </div>
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger >
             <Button variant="destructive" disabled={isDeleting}>
               <Trash2 className="mr-2 h-4 w-4" />
               Verwyder
@@ -191,7 +191,7 @@ export function AnnouncementEditForm({
             </Label>
             <Select
               value={formData.type}
-              onValueChange={(v) => setField("type", v)}
+              onValueChange={(v: any) => setField("type", v ?? "general")}
             >
               <SelectTrigger id="type">
                 <SelectValue placeholder="Kies tipe" />
@@ -239,7 +239,7 @@ export function AnnouncementEditForm({
         )}
 
         <div className="flex justify-end gap-3 border-t border-gray-200 pt-6">
-          <Button type="button" variant="outline" asChild disabled={isLoading}>
+          <Button type="button" variant="outline" disabled={isLoading}>
             <Link href="/admin/aankondigings">
               <X className="mr-2 h-4 w-4" />
               Kanselleer

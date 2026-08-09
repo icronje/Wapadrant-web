@@ -52,12 +52,10 @@ export default function AdminPhotoAlbumsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Foto Albums</h1>
           <p className="text-sm text-gray-500">Bestuur foto albums.</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/foto-albums/skep">
+        <Link href="/admin/foto-albums/skep"><Button >
             <Plus className="mr-2 h-4 w-4" />
             Skep Album
-          </Link>
-        </Button>
+          </Button></Link>
       </div>
 
       {loading ? (
@@ -67,9 +65,7 @@ export default function AdminPhotoAlbumsPage() {
           <Camera className="mx-auto mb-3 h-12 w-12 text-gray-300" />
           <p className="text-lg font-semibold text-gray-900">Geen foto albums nie.</p>
           <p className="mt-2 text-sm text-gray-500">Skep die eerste album om te begin.</p>
-          <Button asChild className="mt-4">
-            <Link href="/admin/foto-albums/skep">Skep Album</Link>
-          </Button>
+          <Link href="/admin/foto-albums/skep"><Button className="mt-4">Skep Album</Button></Link>
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -108,7 +104,7 @@ export default function AdminPhotoAlbumsPage() {
                   ) : null}
 
                   <div className="mt-4 flex items-center gap-2">
-                    <Button variant="outline" size="sm" asChild className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1">
                       <Link href={`/admin/foto-albums/${album.id}`}>
                         <Pencil className="mr-1 h-4 w-4" />
                         Wysig

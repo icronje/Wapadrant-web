@@ -225,14 +225,14 @@ export default function KontakOnsPage() {
                   <Button
                     type="submit"
                     className="w-full sm:w-auto"
-                    disabled={loading}
-                    render={
-                      <span className="gap-2">
+                    disabled={loading}>
+                    <span className="gap-2">
+                      
                         <Send className="h-4 w-4" />
                         {loading ? "Stuur..." : "Stuur boodskap"}
-                      </span>
-                    }
-                  />
+                      
+                    </span>
+                  </Button>
                 </form>
               </CardContent>
             </Card>
@@ -260,19 +260,14 @@ export default function KontakOnsPage() {
                   hier bygevoeg word.
                 </p>
                 <Button
-                  variant="outline"
-                  render={
-                    <Link
-                      href="https://maps.google.com/?q=Sunrise+Road+3,+Olympus,+Pretoria"
+                  variant="outline"><Link href="https://maps.google.com/?q=Sunrise+Road+3,+Olympus,+Pretoria"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="gap-2"
                     >
                       <MapPin className="h-4 w-4" />
                       Kry aanwysings
-                    </Link>
-                  }
-                />
+                    </Link></Button>
               </CardContent>
             </Card>
 

@@ -75,7 +75,7 @@ export default async function NuusbriewePage() {
                 </p>
               </div>
             </div>
-            <Button variant="outline" asChild>
+            <Button variant="outline" >
               <Link href="/kontak-ons">Kontak ons</Link>
             </Button>
           </div>
@@ -110,7 +110,7 @@ export default async function NuusbriewePage() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full" asChild>
+                    <Button className="w-full" >
                       <a
                         href={newsletter.fileUrl}
                         target="_blank"

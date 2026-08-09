@@ -75,13 +75,12 @@ export function TicketSalesClient({
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="mb-2"
-            render={<Link href="/admin/gebeurtenisse"><ArrowLeft className="mr-1 h-4 w-4" />Terug</Link>}
-          />
-          <h1 className="text-3xl font-bold text-gray-900">{event.title}</h1>
+          <Link href="/admin/gebeurtenisse">
+          <Button variant="ghost" size="sm" className="mb-2">
+            <ArrowLeft className="mr-1 h-4 w-4" />Terug
+          </Button>
+        </Link>
+        <h1 className="text-3xl font-bold text-gray-900">{event.title}</h1>
           <p className="mt-1 flex items-center gap-2 text-sm text-gray-500">
             <Calendar className="h-4 w-4" />
             {formatDateTime(event.date)}

@@ -223,14 +223,14 @@ export default function DienMetGawesPage() {
                   <Button
                     type="submit"
                     className="w-full sm:w-auto"
-                    disabled={loading}
-                    render={
-                      <span className="gap-2">
+                    disabled={loading}>
+                    <span className="gap-2">
+                      
                         <Send className="h-4 w-4" />
                         {loading ? "Stuur..." : "Stuur gebedsversoek"}
-                      </span>
-                    }
-                  />
+                      
+                    </span>
+                  </Button>
                 </form>
               </CardContent>
             </Card>

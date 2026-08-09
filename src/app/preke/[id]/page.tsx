@@ -94,7 +94,7 @@ export default async function SermonDetailPage({
     <div className="flex flex-1 flex-col">
       <section className="bg-church-pattern py-12 sm:py-20">
         <Container>
-          <Button variant="ghost" asChild className="mb-4 -ml-2">
+          <Button variant="ghost" className="mb-4 -ml-2">
             <Link href="/preke" className="inline-flex items-center gap-1.5">
               <ArrowLeft className="h-4 w-4" />
               Terug na Preke

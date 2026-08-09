@@ -38,7 +38,7 @@ export function RelatedSermons({ series, sermons }: RelatedSermonsProps) {
       </CardHeader>
       <CardContent className="space-y-3">
         {sermons.map((item) => {
-          const sermon = item.props.sermon;
+          const sermon = item;
           return (
             <Link
               key={sermon.id}
@@ -61,9 +61,7 @@ export function RelatedSermons({ series, sermons }: RelatedSermonsProps) {
             </Link>
           );
         })}
-        <Button asChild variant="outline" className="w-full">
-          <Link href="/preke">Sien alle preke</Link>
-        </Button>
+        <Link href="/preke"><Button variant="outline" className="w-full">Sien alle preke</Button></Link>
       </CardContent>
     </Card>
   );

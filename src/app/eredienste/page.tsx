@@ -227,34 +227,24 @@ export default function EredienstePage() {
                 <div className="flex flex-wrap gap-3">
                   <Button
                     variant="outline"
-                    className="border-[#1877F2]/30 text-[#1877F2] hover:bg-[#1877F2]/5"
-                    render={
-                      <Link
-                        href="https://www.facebook.com/pg/Wapadrant-Gemeente-314127775289345/videos/"
+                    ><Link href="https://www.facebook.com/pg/Wapadrant-Gemeente-314127775289345/videos/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="gap-2"
                       >
                         <Video className="h-4 w-4" />
                         Kyk op Facebook
-                      </Link>
-                    }
-                  />
+                      </Link></Button>
                   <Button
                     variant="outline"
-                    className="border-red-600/30 text-red-600 hover:bg-red-600/5"
-                    render={
-                      <Link
-                        href="https://www.youtube.com/channel/UCb3hrnMcAH83-6mloVeZC2g"
+                    ><Link href="https://www.youtube.com/channel/UCb3hrnMcAH83-6mloVeZC2g"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="gap-2"
                       >
                         <Headphones className="h-4 w-4" />
                         Luister op YouTube
-                      </Link>
-                    }
-                  />
+                      </Link></Button>
                 </div>
               </CardContent>
             </Card>

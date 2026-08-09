@@ -37,7 +37,7 @@ export function SermonArchiveClient({
     const q = query.toLowerCase().trim();
     return childArray.filter((child) => {
       if (!isValidElement(child)) return false;
-      const sermon: Sermon | undefined = (child as ReactElement).props?.sermon;
+      const sermon: Sermon | undefined = (child as any).props?.sermon;
       if (!sermon) return false;
       const matchesQuery =
         !q ||
@@ -83,7 +83,7 @@ export function SermonArchiveClient({
           >
             Filter reeks
           </label>
-          <Select value={selectedSeries} onValueChange={setSelectedSeries}>
+          <Select value={selectedSeries} onValueChange={(v) => setSelectedSeries(v ?? "all")}>
             <SelectTrigger id="series-filter" className="w-full">
               <SelectValue placeholder="Alle reekse" />
             </SelectTrigger>

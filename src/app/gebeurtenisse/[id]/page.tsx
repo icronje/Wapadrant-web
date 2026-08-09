@@ -80,7 +80,12 @@ export default async function EventDetailPage({ params }: Props) {
     <div className="flex flex-1 flex-col">
       <section className="bg-church-pattern py-12 sm:py-16">
         <Container>
-          <Button variant="ghost" className="mb-4" render={<Link href="/gebeurtenisse"><ArrowLeft className="mr-2 h-4 w-4" />Terug na gebeurtenisse</Link>} />
+          <Link href="/gebeurtenisse">
+            <Button variant="ghost" className="mb-4">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Terug na Gebeurtenisse
+            </Button>
+          </Link>
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="overflow-hidden rounded-2xl bg-muted ring-1 ring-foreground/10">
               {event.imageUrl ? (
@@ -129,8 +134,7 @@ export default async function EventDetailPage({ params }: Props) {
                   <TicketCheckout event={event}>
                     <Button size="lg">
                       <Ticket className="mr-2 h-5 w-5" />
-                      Koop Kaartjies
-                    </Button>
+                      Koop Kaartjies</Button>
                   </TicketCheckout>
                 </div>
               ) : hasTickets && soldOut ? (

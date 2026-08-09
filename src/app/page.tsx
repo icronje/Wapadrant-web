@@ -110,22 +110,15 @@ export default function Home() {
               Kom maak deel van die Wapadrant-gesin.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-                render={
-                  <Link href="/kontak-ons" className="gap-2">
+              <Link href="/kontak-ons">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
                     Ek wil inskakel
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
-                }
-              />
-              <Button
-                variant="outline"
+                </Button>
+              </Link>
+              <Link href="/eredienste"><Button variant="outline"
                 size="lg"
-                className="border-primary/30 text-primary hover:bg-primary/5"
-                render={<Link href="/eredienste">Sien ons eredienste</Link>}
-              />
+                className="border-primary/30 text-primary hover:bg-primary/5">Sien ons eredienste</Button></Link>
             </div>
           </div>
         </Container>
@@ -303,14 +296,10 @@ export default function Home() {
           <Button
             size="lg"
             variant="secondary"
-            className="mt-8 bg-accent-gold text-accent-gold-foreground hover:bg-accent-gold/90"
-            render={
-              <Link href="/kontak-ons" className="gap-2">
+            ><Link href="/kontak-ons" className="gap-2">
                 Kom ons gesels
                 <ArrowRight className="h-4 w-4" />
-              </Link>
-            }
-          />
+              </Link></Button>
         </Container>
       </section>
     </div>

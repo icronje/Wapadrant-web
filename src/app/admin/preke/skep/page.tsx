@@ -201,7 +201,7 @@ export default function CreateSermonPage() {
         )}
 
         <div className="flex justify-end gap-3 border-t border-gray-200 pt-6">
-          <Button type="button" variant="outline" asChild disabled={isLoading}>
+          <Button type="button" variant="outline" disabled={isLoading}>
             <Link href="/admin/preke">
               <X className="mr-2 h-4 w-4" />
               Kanselleer

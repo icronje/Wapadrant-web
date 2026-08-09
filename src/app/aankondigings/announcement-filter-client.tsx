@@ -40,7 +40,7 @@ export function AnnouncementFilterClient({
   const filtered = useMemo(() => {
     return childArray.filter((child) => {
       if (!isValidElement(child)) return false;
-      const a: Announcement | undefined = (child as ReactElement).props?.announcement;
+      const a: Announcement | undefined = (child as any).props?.announcement;
       if (!a) return false;
       return type === "all" || a.type === type;
     });
@@ -60,7 +60,7 @@ export function AnnouncementFilterClient({
           >
             Filter tipe
           </label>
-          <Select value={type} onValueChange={setType}>
+          <Select value={type} onValueChange={(v: any) => setType(v ?? "all")}>
             <SelectTrigger id="type-filter" className="w-full">
               <SelectValue placeholder="Alle tipe" />
             </SelectTrigger>

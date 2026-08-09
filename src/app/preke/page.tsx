@@ -105,9 +105,7 @@ function SermonCard({ sermon }: { sermon: Sermon }) {
         ) : null}
       </CardHeader>
       <CardContent>
-        <Button asChild className="w-full">
-          <Link href={`/preke/${sermon.id}`}>Luister / Kyk</Link>
-        </Button>
+        <Link href={`/preke/${sermon.id}`}><Button className="w-full">Luister / Kyk</Button></Link>
       </CardContent>
     </Card>
   );

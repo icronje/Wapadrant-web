@@ -195,9 +195,7 @@ export function EventEditForm({ event, totalSold, revenue, ticketTypeSales }: Ev
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Wysig Gebeurtenis</h1>
         <div className="flex gap-2">
-          <Button variant="outline" render={<Link href={`/admin/gebeurtenisse/${event.id}/tickets`}>Sien Verkope</Link>}>
-            <TrendingUp className="mr-2 h-4 w-4" />
-          </Button>
+          <Link href={`/admin/gebeurtenisse/${event.id}/tickets`}><Button variant="outline"><TrendingUp className="mr-2 h-4 w-4" /></Button></Link>
           <Dialog>
             <DialogTrigger>
               <Button variant="destructive">

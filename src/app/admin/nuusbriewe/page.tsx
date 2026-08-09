@@ -61,12 +61,10 @@ export default function AdminNewslettersPage() {
           <h1 className="text-3xl font-bold text-gray-900">Nuusbriewe</h1>
           <p className="text-sm text-gray-500">Bestuur en laai nuusbriewe op.</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/nuusbriewe/laai-op">
+        <Link href="/admin/nuusbriewe/laai-op"><Button >
             <Plus className="mr-2 h-4 w-4" />
             Laai Op Nuusbrief
-          </Link>
-        </Button>
+          </Button></Link>
       </div>
 
       {loading ? (
@@ -76,9 +74,7 @@ export default function AdminNewslettersPage() {
           <FileText className="mx-auto mb-3 h-12 w-12 text-gray-300" />
           <p className="text-lg font-semibold text-gray-900">Geen nuusbriewe nie.</p>
           <p className="mt-2 text-sm text-gray-500">Laai die eerste nuusbrief op.</p>
-          <Button asChild className="mt-4">
-            <Link href="/admin/nuusbriewe/laai-op">Laai Op Nuusbrief</Link>
-          </Button>
+          <Link href="/admin/nuusbriewe/laai-op"><Button className="mt-4">Laai Op Nuusbrief</Button></Link>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
@@ -99,7 +95,7 @@ export default function AdminNewslettersPage() {
                   </div>
                 </div>
                 <div className="mt-4 flex items-center gap-2">
-                  <Button asChild variant="outline" className="flex-1">
+                  <Button variant="outline" className="flex-1">
                     <a
                       href={newsletter.fileUrl}
                       target="_blank"
