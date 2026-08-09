@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,20 +24,18 @@ const navLinks = [
   { label: "Tuis", href: "/" },
   { label: "Neem Kennis", href: "/neem-kennis" },
   { label: "Eredienste", href: "/eredienste" },
+  { label: "Ontdek Jou Plek", href: "/ontdek-jou-plek" },
+  { label: "Dien Met Gawes", href: "/dien-met-gawes" },
   {
-    label: "Ontdek Jou Plek",
-    href: "/ontdek-jou-plek",
+    label: "Meer",
+    href: "/meer",
     children: [
-      { label: "Dien Met Gawes", href: "/ontdek-jou-plek/dien-met-gawes" },
-      { label: "Jeuggroepe", href: "/ontdek-jou-plek/jeuggroepe" },
-      { label: "Kleingroepe", href: "/ontdek-jou-plek/kleingroepe" },
+      { label: "Kontak Ons", href: "/kontak-ons" },
+      { label: "Foto Albums", href: "/foto-albums" },
+      { label: "Gebeurtenisse", href: "/gebeurtenisse" },
+      { label: "Argief", href: "/argief" },
     ],
   },
-  { label: "Meer", href: "/meer" },
-  { label: "Kontak Ons", href: "/kontak-ons" },
-  { label: "Foto Albums", href: "/foto-albums" },
-  { label: "Finansiële Sake", href: "/finansiele-sake" },
-  { label: "Argief", href: "/argief" },
 ];
 
 export function Header() {
@@ -61,9 +60,14 @@ export function Header() {
       <Container>
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2 focus:outline-none">
-            <span className="font-heading text-xl font-bold tracking-tight text-primary sm:text-2xl">
-              WAPADRANT
-            </span>
+            <Image
+              src="/wapadrant-logo.jpg"
+              alt="Wapadrant Gemeente"
+              width={180}
+              height={60}
+              className="h-[60px] w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -112,9 +116,14 @@ export function Header() {
               <SheetTitle className="sr-only">Navigasie</SheetTitle>
               <div className="flex h-full flex-col">
                 <div className="flex h-16 items-center justify-between border-b px-6">
-                  <span className="font-heading text-lg font-bold text-primary">
-                    WAPADRANT
-                  </span>
+                  <Image
+                    src="/wapadrant-logo.jpg"
+                    alt="Wapadrant Gemeente"
+                    width={140}
+                    height={46}
+                    className="h-[46px] w-auto object-contain"
+                    priority
+                  />
                 </div>
                 <nav className="flex flex-1 flex-col gap-1 overflow-auto p-6">
                   {navLinks.map((link) =>
