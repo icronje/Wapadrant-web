@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String?
+  email     String   @unique
+  role      String   @default("editor") // admin, editor
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  endDate     DateTime?
+  location    String
+  imageUrl    String
+  isPublished Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  ticketTypes TicketType[]
+  tickets     Ticket[]
+}
+
+model TicketType {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id])
+  name      String
+  price     Decimal  @db.Decimal(10, 2)
+  quantity  Int
+  sold      Int      @default(0)
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id         String   @id @default(cuid())
+  eventId    String
+  event      Event    @relation(fields: [eventId], references: [id])
+  ticketTypeId String
+  ticketType TicketType @relation(fields: [ticketTypeId], references: [id])
+  buyerName  String
+  buyerEmail String
+  buyerPhone String?
+  quantity   Int
+  totalAmount Decimal  @db.Decimal(10, 2)
+  status     String   @default("confirmed") // confirmed, cancelled, refunded
+  createdAt  DateTime @default(now())
+}
+
+model Sermon {
+  id          String   @id @default(cuid())
+  title       String
+  speaker     String
+  date        DateTime
+  videoUrl    String
+  audioUrl    String
+  series      String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  type        String   @default("general") // general, birthday, news, gksa
+  publishedAt DateTime @default(now())
+  expiresAt   DateTime?
+}
+
+model Newsletter {
+  id       String @id @default(cuid())
+  title    String
+  fileUrl  String
+}
+
+model PhotoAlbum {
+  id          String  @id @default(cuid())
+  title       String
+  description String
+  coverUrl    String
+  photos      Photo[]
+}
+
+model Photo {
+  id         String     @id @default(cuid())
+  albumId    String
+  album      PhotoAlbum @relation(fields: [albumId], references: [id])
+  url        String
+  caption    String?
+  sortOrder  Int        @default(0)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  type      String   @default("general") // general, prayer, volunteer
+  status    String   @default("new") // new, read, responded, closed
+  createdAt DateTime @default(now())
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
