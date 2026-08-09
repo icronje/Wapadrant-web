@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Settings as SettingsIcon, Phone, Mail, MapPin, Clock, Facebook, Youtube } from "lucide-react"
+import { Settings as SettingsIcon, Phone, Mail, MapPin, Clock, Share2, Video } from "lucide-react"
 
 interface SettingsFormProps {
   initialSettings: Record<string, string>
@@ -14,8 +14,8 @@ const settingFields = [
   { key: "church_whatsapp", label: "Kerk WhatsApp", icon: Phone },
   { key: "church_email", label: "Kerk E-pos", icon: Mail },
   { key: "service_times", label: "Diens Tye", icon: Clock },
-  { key: "facebook_url", label: "Facebook URL", icon: Facebook },
-  { key: "youtube_url", label: "YouTube URL", icon: Youtube },
+  { key: "facebook_url", label: "Share2 URL", icon: Share2 },
+  { key: "youtube_url", label: "YouTube URL", icon: Video },
 ]
 
 export default function SettingsForm({ initialSettings }: SettingsFormProps) {

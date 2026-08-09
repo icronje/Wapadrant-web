@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { Settings as SettingsIcon, Phone, Mail, MapPin, Clock, Facebook, Youtube } from "lucide-react"
+import { Settings as SettingsIcon, Phone, Mail, MapPin, Clock, Share2 } from "lucide-react"
 import SettingsForm from "./settings-form"
 
 interface Setting {
@@ -16,7 +16,7 @@ const settingLabels: Record<string, string> = {
   church_whatsapp: "Kerk WhatsApp",
   church_email: "Kerk E-pos",
   service_times: "Diens Tye",
-  facebook_url: "Facebook URL",
+  facebook_url: "Share2 URL",
   youtube_url: "YouTube URL",
 }
 
@@ -27,8 +27,8 @@ const settingIcons: Record<string, React.ComponentType<any>> = {
   church_whatsapp: Phone,
   church_email: Mail,
   service_times: Clock,
-  facebook_url: Facebook,
-  youtube_url: Youtube,
+  facebook_url: Share2,
+  youtube_url: Share2,
 }
 
 export default async function AdminSettings() {

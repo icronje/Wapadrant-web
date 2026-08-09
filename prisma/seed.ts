@@ -97,33 +97,39 @@ async function main() {
 
   // Create Sermons
   const sermon1 = await prisma.sermon.create({
-    title: "God se getrouheid",
-    speaker: "Ds. Johan Buys",
-    date: new Date("2026-08-03T10:00:00+02:00"),
-    videoUrl: "https://youtube.com/watch?v=example1",
-    audioUrl: "",
-    series: "",
-    description: "",
+    data: {
+      title: "God se getrouheid",
+      speaker: "Ds. Johan Buys",
+      date: new Date("2026-08-03T10:00:00+02:00"),
+      videoUrl: "https://youtube.com/watch?v=example1",
+      audioUrl: "",
+      series: "",
+      description: "",
+    },
   })
 
   const sermon2 = await prisma.sermon.create({
-    title: "Romeine: Genade vir elke dag",
-    speaker: "Ds. Pieter Coetzee",
-    date: new Date("2026-07-27T10:00:00+02:00"),
-    videoUrl: "https://youtube.com/watch?v=example2",
-    audioUrl: "",
-    series: "Romeine",
-    description: "",
+    data: {
+      title: "Romeine: Genade vir elke dag",
+      speaker: "Ds. Pieter Coetzee",
+      date: new Date("2026-07-27T10:00:00+02:00"),
+      videoUrl: "https://youtube.com/watch?v=example2",
+      audioUrl: "",
+      series: "Romeine",
+      description: "",
+    },
   })
 
   const sermon3 = await prisma.sermon.create({
-    title: "Lewe in die Gees",
-    speaker: "Ds. Johan Buys",
-    date: new Date("2026-07-20T10:00:00+02:00"),
-    videoUrl: "https://youtube.com/watch?v=example3",
-    audioUrl: "",
-    series: "Romeine",
-    description: "",
+    data: {
+      title: "Lewe in die Gees",
+      speaker: "Ds. Johan Buys",
+      date: new Date("2026-07-20T10:00:00+02:00"),
+      videoUrl: "https://youtube.com/watch?v=example3",
+      audioUrl: "",
+      series: "Romeine",
+      description: "",
+    },
   })
   console.log("✅ Preke geskep")
 
