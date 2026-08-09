@@ -1,30 +1,16 @@
 import { auth } from "@/lib/auth"
-import { redirect } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, Calendar, Mic, Megaphone, MessageSquare, Settings, LogOut, Images, FileText, Newspaper } from "lucide-react"
-import { headers } from "next/headers"
+import { LayoutDashboard, Calendar, Mic, Megaphone, MessageSquare, Settings, LogOut, Images, Newspaper } from "lucide-react"
 
 interface AdminLayoutProps {
   children: React.ReactNode
 }
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const headersList = await headers()
-  const pathname = headersList.get("x-pathname") || ""
-  
-  // Skip auth check for login page
-  const isLoginPage = pathname === "/admin/login"
-  
-  let session = null
-  if (!isLoginPage) {
-    session = await auth()
-    if (!session?.user) {
-      redirect("/admin/login")
-    }
-  }
+  const session = await auth()
 
-  // Login page renders without sidebar
-  if (isLoginPage) {
+  // Not logged in — render children bare (middleware handles redirect for non-login pages)
+  if (!session?.user) {
     return <div className="min-h-screen bg-gray-50">{children}</div>
   }
 
@@ -44,7 +30,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       <aside className="w-64 bg-white border-r border-gray-200 fixed h-full overflow-y-auto">
         <div className="p-6">
           <h1 className="text-xl font-bold text-gray-900">Wapadrant Admin</h1>
-          <p className="text-sm text-gray-500 mt-1">{session?.user?.name || session?.user?.email}</p>
+          <p className="text-sm text-gray-500 mt-1">{session.user.name || session.user.email}</p>
         </div>
         <nav className="mt-6 px-3">
           {navItems.map((item) => {
