@@ -67,6 +67,55 @@ async function main() {
   })
   console.log("✅ Gebeurtenisse geskep")
 
+  // Create Riana Nel Konser event with ticket types
+  const rianaNelKonser = await prisma.event.upsert({
+    where: { id: "riana-nel-konser-2026" },
+    update: {},
+    create: {
+      id: "riana-nel-konser-2026",
+      title: "Riana Nel Konser",
+      description: "'n Wonderlike aand met Riana Nel",
+      date: new Date("2026-09-19T19:00:00+02:00"),
+      location: "Wapadrant Kerksaal, Sunriseweg 3, Olympus, Pretoria",
+      imageUrl: "/images/riana-nel-konser-2026.jpg",
+      isPublished: true,
+    },
+  })
+
+  await prisma.ticketType.createMany({
+    data: [
+      {
+        eventId: rianaNelKonser.id,
+        name: "Volwassenes",
+        price: 250.00,
+        quantity: 300,
+        sold: 0,
+      },
+      {
+        eventId: rianaNelKonser.id,
+        name: "Hoërskoolleerders",
+        price: 150.00,
+        quantity: 100,
+        sold: 0,
+      },
+      {
+        eventId: rianaNelKonser.id,
+        name: "Laerskoolleerders",
+        price: 50.00,
+        quantity: 80,
+        sold: 0,
+      },
+      {
+        eventId: rianaNelKonser.id,
+        name: "Worsbroodjies",
+        price: 35.00,
+        quantity: 200,
+        sold: 0,
+      },
+    ],
+  })
+  console.log("✅ Riana Nel Konser event en kaartjies geskep")
+
   // Create Ticket Types for Jeugkonferensie
   await prisma.ticketType.createMany({
     data: [
@@ -97,33 +146,39 @@ async function main() {
 
   // Create Sermons
   const sermon1 = await prisma.sermon.create({
-    title: "God se getrouheid",
-    speaker: "Ds. Johan Buys",
-    date: new Date("2026-08-03T10:00:00+02:00"),
-    videoUrl: "https://youtube.com/watch?v=example1",
-    audioUrl: "",
-    series: "",
-    description: "",
+    data: {
+      title: "God se getrouheid",
+      speaker: "Ds. Johan Buys",
+      date: new Date("2026-08-03T10:00:00+02:00"),
+      videoUrl: "https://youtube.com/watch?v=example1",
+      audioUrl: "",
+      series: "",
+      description: "",
+    },
   })
 
   const sermon2 = await prisma.sermon.create({
-    title: "Romeine: Genade vir elke dag",
-    speaker: "Ds. Pieter Coetzee",
-    date: new Date("2026-07-27T10:00:00+02:00"),
-    videoUrl: "https://youtube.com/watch?v=example2",
-    audioUrl: "",
-    series: "Romeine",
-    description: "",
+    data: {
+      title: "Romeine: Genade vir elke dag",
+      speaker: "Ds. Pieter Coetzee",
+      date: new Date("2026-07-27T10:00:00+02:00"),
+      videoUrl: "https://youtube.com/watch?v=example2",
+      audioUrl: "",
+      series: "Romeine",
+      description: "",
+    },
   })
 
   const sermon3 = await prisma.sermon.create({
-    title: "Lewe in die Gees",
-    speaker: "Ds. Johan Buys",
-    date: new Date("2026-07-20T10:00:00+02:00"),
-    videoUrl: "https://youtube.com/watch?v=example3",
-    audioUrl: "",
-    series: "Romeine",
-    description: "",
+    data: {
+      title: "Lewe in die Gees",
+      speaker: "Ds. Johan Buys",
+      date: new Date("2026-07-20T10:00:00+02:00"),
+      videoUrl: "https://youtube.com/watch?v=example3",
+      audioUrl: "",
+      series: "Romeine",
+      description: "",
+    },
   })
   console.log("✅ Preke geskep")
 

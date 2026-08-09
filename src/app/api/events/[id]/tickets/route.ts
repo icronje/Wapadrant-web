@@ -1,14 +1,26 @@
+export const dynamic = "force-dynamic"
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { auth } from '@/lib/auth'
+import { sendTicketConfirmation } from '@/lib/email'
+
+
+function generateReference(eventId: string): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let suffix = ''
+  for (let i = 0; i < 6; i++) {
+    suffix += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return `WPR-${eventId}-${suffix}`
+}
+
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     
     if (!session?.user || (session.user.role !== 'admin' && session.user.role !== 'editor')) {
       return NextResponse.json(
@@ -44,13 +56,44 @@ export async function POST(
   try {
     const { id: eventId } = await params
     const body = await request.json()
-    const { ticketTypeId, buyerName, buyerEmail, buyerPhone, quantity } = body
+    const { buyerName, buyerEmail, buyerPhone, items } = body
 
-    if (!ticketTypeId || !buyerName || !buyerEmail || !quantity) {
+    // Validate required fields
+    if (!buyerName) {
       return NextResponse.json(
-        { error: 'Vereiste velde ontbreek' },
+        { error: 'Naam is vereis' },
         { status: 400 }
       )
+    }
+
+    if (!buyerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) {
+      return NextResponse.json(
+        { error: 'Geldige e-pos adres is vereis' },
+        { status: 400 }
+      )
+    }
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return NextResponse.json(
+        { error: 'Ten minste een kaartjie item is vereis' },
+        { status: 400 }
+      )
+    }
+
+    // Validate each item
+    for (const item of items) {
+      if (!item.ticketTypeId) {
+        return NextResponse.json(
+          { error: 'Kaartjie tipe ID is vereis vir elke item' },
+          { status: 400 }
+        )
+      }
+      if (!item.quantity || item.quantity <= 0) {
+        return NextResponse.json(
+          { error: 'Hoeveelheid moet groter as 0 wees' },
+          { status: 400 }
+        )
+      }
     }
 
     // Verify event exists and is published
@@ -65,56 +108,91 @@ export async function POST(
       )
     }
 
-    // Get ticket type and check availability
-    const ticketType = await prisma.ticketType.findUnique({
-      where: { id: ticketTypeId },
+    // Process purchase in transaction
+    const result = await prisma.$transaction(async (tx) => {
+      const createdTickets = []
+      let totalAmount = 0
+
+      for (const item of items) {
+        const ticketType = await tx.ticketType.findUnique({
+          where: { id: item.ticketTypeId },
+        })
+
+        if (!ticketType) {
+          throw new Error(`Kaartjie tipe nie gevind nie: ${item.ticketTypeId}`)
+        }
+
+        if (ticketType.eventId !== eventId) {
+          throw new Error(`Kaartjie tipe behoort nie tot hierdie geleentheid nie`)
+        }
+
+        const availableQuantity = ticketType.quantity - ticketType.sold
+        if (item.quantity > availableQuantity) {
+          throw new Error(`Nie genoeg ${ticketType.name} kaartjies beskikbaar nie`)
+        }
+
+        const itemTotal = ticketType.price.mul(item.quantity)
+        totalAmount += itemTotal.toNumber()
+
+        const reference = generateReference(eventId)
+
+        const ticket = await tx.ticket.create({
+          data: {
+            eventId,
+            ticketTypeId: item.ticketTypeId,
+            buyerName,
+            buyerEmail,
+            buyerPhone: buyerPhone || null,
+            quantity: item.quantity,
+            totalAmount: itemTotal,
+            status: 'confirmed',
+          },
+        })
+
+        // Update sold count
+        await tx.ticketType.update({
+          where: { id: item.ticketTypeId },
+          data: {
+            sold: { increment: item.quantity },
+          },
+        })
+
+        createdTickets.push({
+          ...ticket,
+          reference,
+          ticketTypeName: ticketType.name,
+          ticketPrice: ticketType.price.toNumber(),
+        })
+      }
+
+      return { createdTickets, totalAmount }
     })
 
-    if (!ticketType) {
-      return NextResponse.json(
-        { error: 'Kaartjie tipe nie gevind nie' },
-        { status: 404 }
-      )
+    // Send confirmation email (non-blocking, don't fail purchase if email fails)
+    try {
+      await sendTicketConfirmation(buyerEmail, {
+        buyerName,
+        tickets: result.createdTickets,
+        eventName: event.title,
+        eventDate: event.date.toISOString(),
+        eventLocation: event.location,
+        totalAmount: result.totalAmount,
+      })
+      console.log(`✅ E-pos bevestiging gestuur na ${buyerEmail}`)
+    } catch (emailError) {
+      console.error('❌ Kon nie e-pos bevestiging stuur nie:', emailError)
+      // Don't fail the purchase - just log the error
     }
 
-    const availableQuantity = ticketType.quantity - ticketType.sold
-    if (quantity > availableQuantity) {
-      return NextResponse.json(
-        { error: 'Nie genoeg kaartjies beskikbaar nie' },
-        { status: 400 }
-      )
-    }
-
-    // Calculate total amount
-    const totalAmount = ticketType.price.mul(quantity)
-
-    // Create ticket and update sold count in transaction
-    const [ticket] = await prisma.$transaction([
-      prisma.ticket.create({
-        data: {
-          eventId,
-          ticketTypeId,
-          buyerName,
-          buyerEmail,
-          buyerPhone,
-          quantity,
-          totalAmount,
-        },
-      }),
-      prisma.ticketType.update({
-        where: { id: ticketTypeId },
-        data: {
-          sold: { increment: quantity },
-        },
-      }),
-    ])
-
-    return NextResponse.json(ticket, { status: 201 })
-  } catch (error) {
+    return NextResponse.json({
+      tickets: result.createdTickets,
+      totalAmount: result.totalAmount,
+    }, { status: 201 })
+  } catch (error: any) {
     console.error('Error purchasing ticket:', error)
     return NextResponse.json(
-      { error: 'Kon nie kaartjie koop nie' },
-      { status: 500 }
+      { error: error.message || 'Kon nie kaartjie koop nie' },
+      { status: error.message?.includes('nie beskikbaar') ? 404 : 400 }
     )
   }
 }
