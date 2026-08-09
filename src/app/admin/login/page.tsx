@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     setError("")
     setIsLoading(true)
 
-    const formData = new FormData(e.target as HTML.FormElement)
+    const formData = new FormData(e.target as HTMLFormElement)
     const username = formData.get("username") as string
     const password = formData.get("password") as string
 
