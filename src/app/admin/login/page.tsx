@@ -1,116 +1,121 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { Container } from "@/components/layout/container";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { Lock, User } from "lucide-react";
+import { useState } from "react"
+import { signIn } from "next-auth/react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Lock, User } from "lucide-react"
 
 export default function AdminLoginPage() {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setIsLoading(true)
+
+    const formData = new FormData(e.target as HTMLFormElement)
+    const username = formData.get("username") as string
+    const password = formData.get("password") as string
 
     try {
       const result = await signIn("credentials", {
         username,
         password,
         redirect: false,
-        callbackUrl: "/admin",
-      });
+      })
 
       if (result?.error) {
-        toast.error("Ongeldige gebruikersnaam of wagwoord. Probeer weer.");
-        setLoading(false);
-        return;
+        setError(result.error)
+      } else {
+        router.push("/admin")
+        router.refresh()
       }
-
-      toast.success("Suksesvol aangemeld. Welkom terug!");
-      router.push("/admin");
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Kon nie aanmeld nie.");
-      setLoading(false);
+    } catch (err) {
+      setError("Onverwagte fout. Probeer asseblief weer.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin"
+
   return (
-    <div className="flex flex-1 flex-col">
-      <section className="bg-church-pattern py-16 sm:py-24">
-        <Container>
-          <div className="mx-auto max-w-md">
-            <Card className="border-border/60 bg-card">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Lock className="h-6 w-6" />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Wapadrant Admin</h1>
+          <p className="text-gray-600 mt-2">Teken in om voort te gaan</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 text-red-800 p-4 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
+            {searchParams.get("error") && (
+              <div className="bg-red-50 text-red-800 p-4 rounded-lg text-sm">
+                Ongeldige gebruikersnaam of wagwoord
+              </div>
+            )}
+
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                Gebruikersnaam
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
                 </div>
-                <CardTitle className="font-heading text-2xl">Admin Teken In</CardTitle>
-                <CardDescription>
-                  Slegs vir gemagtigde gebruikers
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="username">Gebruikersnaam</Label>
-                    <div className="relative">
-                      <User className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Jou gebruikersnaam"
-                        className="pl-9"
-                        required
-                      />
-                    </div>
-                  </div>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="jou gebruikersnaam"
+                />
+              </div>
+            </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Wagwoord</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Jou wagwoord"
-                        className="pl-9"
-                        required
-                      />
-                    </div>
-                  </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Wagwoord
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
 
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={loading}
-                  >
-                    {loading ? "Teken in..." : "Teken In"}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            >
+              {isLoading ? "Teken in..." : "Teken In"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-gray-500">
+            <p>Admin toegang word beperk tot gemagtigde personeel.</p>
           </div>
-        </Container>
-      </section>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
