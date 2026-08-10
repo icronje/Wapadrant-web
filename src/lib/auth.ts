@@ -1,19 +1,21 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { prisma } from "./prisma"
-import { verifyPassword } from "./password"
+import NextAuth from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { authConfig } from './auth.config'
+import { prisma } from './prisma'
+import { verifyPassword } from './password'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        username: { label: "Gebruikersnaam", type: "text" },
-        password: { label: "Wagwoord", type: "password" },
+        username: { label: 'Gebruikersnaam', type: 'text' },
+        password: { label: 'Wagwoord', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) {
-          throw new Error("Gebruikersnaam en wagwoord vereis")
+          throw new Error('Gebruikersnaam en wagwoord vereis')
         }
 
         const user = await prisma.user.findUnique({
@@ -21,7 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         })
 
         if (!user) {
-          throw new Error("Ongeldige gebruikersnaam of wagwoord")
+          throw new Error('Ongeldige gebruikersnaam of wagwoord')
         }
 
         const isValid = await verifyPassword(
@@ -30,7 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         )
 
         if (!isValid) {
-          throw new Error("Ongeldige gebruikersnaam of wagwoord")
+          throw new Error('Ongeldige gebruikersnaam of wagwoord')
         }
 
         return {
@@ -43,31 +45,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/admin/login",
-    error: "/admin/login",
-  },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-        token.username = (user as any).username
-        token.role = (user as any).role
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        ;(session.user as any).username = token.username
-        ;(session.user as any).role = token.role
-      }
-      return session
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  trustHost: true,
 })
