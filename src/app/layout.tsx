@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { Providers } from "./providers";
 
 const mavenPro = Maven_Pro({
   variable: "--font-maven-pro",
@@ -59,10 +60,12 @@ export default function RootLayout({
       className={`${mavenPro.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
-        <Header />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <Footer />
-        <Toaster />
+        <Providers>
+          <Header />
+          <main className="flex flex-1 flex-col">{children}</main>
+          <Footer />
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
