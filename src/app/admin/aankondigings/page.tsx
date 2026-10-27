@@ -2,7 +2,8 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns"
-import { Megaphone, Tag, Calendar } from "lucide-react"
+import Link from "next/link"
+import { Megaphone, Tag, Calendar, Plus, Pencil } from "lucide-react"
 
 const typeLabels: Record<string, string> = {
   general: "Algemeen",
@@ -33,6 +34,13 @@ export default async function AdminAnnouncements() {
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Aankondigings</h1>
+        <Link
+          href="/admin/aankondigings/skep"
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <Plus className="w-5 h-5" />
+          <span>Skep Nuwe Aankondiging</span>
+        </Link>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -48,12 +56,15 @@ export default async function AdminAnnouncements() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Gepubliseer
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Aksie
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {announcements.length === 0 ? (
               <tr>
-                <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
                   Geen aankondigings nie.
                 </td>
               </tr>
@@ -61,15 +72,15 @@ export default async function AdminAnnouncements() {
               announcements.map((announcement) => (
                 <tr key={announcement.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <div className="flex items-center">
+                    <Link href={`/admin/aankondigings/${announcement.id}`} className="flex items-center">
                       <Megaphone className="w-5 h-5 text-gray-400 mr-3" />
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{announcement.title}</div>
+                        <div className="text-sm font-medium text-blue-600 hover:text-blue-800">{announcement.title}</div>
                         <div className="text-sm text-gray-500 truncate max-w-md">
                           {announcement.content}
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -88,6 +99,14 @@ export default async function AdminAnnouncements() {
                       <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                       {format(announcement.publishedAt, "dd MMM yyyy")}
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Link
+                      href={`/admin/aankondigings/${announcement.id}`}
+                      className="inline-flex items-center text-blue-600 hover:text-blue-800"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Link>
                   </td>
                 </tr>
               ))

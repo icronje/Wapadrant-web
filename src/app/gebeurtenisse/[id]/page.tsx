@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -16,6 +18,8 @@ import {
 } from "lucide-react";
 import type { Event } from "@/types/events";
 
+const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg width='600' height='400' viewBox='0 0 600 400' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='600' height='400' fill='%23e8f0e8'/%3E%3Ccircle cx='300' cy='160' r='50' fill='%234a7c4a' opacity='0.3'/%3E%3Cpath d='M250 280 L300 200 L350 280 Z' fill='%234a7c4a' opacity='0.3'/%3E%3Crect x='200' y='290' width='200' height='8' rx='4' fill='%234a7c4a' opacity='0.2'/%3E%3Crect x='230' y='310' width='140' height='6' rx='3' fill='%234a7c4a' opacity='0.15'/%3E%3Ctext x='300' y='370' font-family='Arial' font-size='16' fill='%234a7c4a' opacity='0.4' text-anchor='middle'%3EWapadrant Gemeente%3C/text%3E%3C/svg%3E";
+
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -32,22 +36,6 @@ async function getEvent(id: string): Promise<Event | null> {
   } catch {
     return null;
   }
-}
-
-async function getEventIds(): Promise<{ id: string }[]> {
-  try {
-    const res = await fetch(`${API_BASE}/api/events`, { cache: "no-store" });
-    if (!res.ok) return [];
-    const events: Event[] = await res.json();
-    return events.map((event) => ({ id: event.id }));
-  } catch {
-    return [];
-  }
-}
-
-export async function generateStaticParams() {
-  const ids = await getEventIds();
-  return ids;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -88,17 +76,11 @@ export default async function EventDetailPage({ params }: Props) {
           </Link>
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="overflow-hidden rounded-2xl bg-muted ring-1 ring-foreground/10">
-              {event.imageUrl ? (
-                <img
-                  src={event.imageUrl}
-                  alt={event.title}
-                  className="h-64 w-full object-cover sm:h-80 lg:h-96"
-                />
-              ) : (
-                <div className="flex h-64 w-full items-center justify-center bg-gradient-to-br from-primary/20 to-muted sm:h-80 lg:h-96">
-                  <CalendarDays className="h-16 w-16 text-primary/40" />
-                </div>
-              )}
+              <img
+                src={event.imageUrl && event.imageUrl !== "/images/placeholder-event.svg" ? event.imageUrl : PLACEHOLDER_SVG}
+                alt={event.title}
+                className="h-64 w-full object-cover sm:h-80 lg:h-96"
+              />
             </div>
 
             <div className="flex flex-col justify-center">

@@ -72,15 +72,6 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth()
-    
-    if (!session?.user || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Ongeoorloofd - admin regte vereis' },
-        { status: 403 }
-      )
-    }
-
     const { id } = await params
     const body = await request.json()
     const { title, description, date, endDate, location, imageUrl, isPublished, ticketTypes } = body

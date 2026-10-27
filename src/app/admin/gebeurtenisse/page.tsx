@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns"
 import Link from "next/link"
-import { Plus, Calendar, MapPin, Ticket } from "lucide-react"
+import { Plus, Calendar, MapPin, Ticket, Pencil } from "lucide-react"
 
 export default async function AdminEvents() {
   const session = await auth()
@@ -57,12 +57,15 @@ export default async function AdminEvents() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Aksie
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {events.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                   Geen gebeurtenisse nie. Skep jou eerste gebeurtenis!
                 </td>
               </tr>
@@ -70,7 +73,7 @@ export default async function AdminEvents() {
               events.map((event) => (
                 <tr key={event.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <div className="flex items-center">
+                    <Link href={`/admin/gebeurtenisse/${event.id}`} className="flex items-center">
                       {event.imageUrl && (
                         <img
                           src={event.imageUrl}
@@ -79,12 +82,12 @@ export default async function AdminEvents() {
                         />
                       )}
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{event.title}</div>
+                        <div className="text-sm font-medium text-blue-600 hover:text-blue-800">{event.title}</div>
                         {event.description && (
                           <div className="text-sm text-gray-500 truncate max-w-xs">{event.description}</div>
                         )}
                       </div>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center text-sm text-gray-900">
@@ -117,6 +120,14 @@ export default async function AdminEvents() {
                     >
                       {event.isPublished ? "Gepubliseer" : "Ongepubliseer"}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Link
+                      href={`/admin/gebeurtenisse/${event.id}`}
+                      className="inline-flex items-center text-blue-600 hover:text-blue-800"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Link>
                   </td>
                 </tr>
               ))

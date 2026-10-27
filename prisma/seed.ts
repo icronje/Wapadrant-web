@@ -69,46 +69,48 @@ async function main() {
   })
   console.log("✅ Gebeurtenisse geskep")
 
-  // Create Riana Nel Konser event with ticket types
-  const rianaNelKonser = await prisma.event.upsert({
-    where: { id: "riana-nel-konser-2026" },
+  // Create Helene Bester Konser event with ticket types
+  // Ticket pricing TBC — placeholder quantities/prices for now
+  const heleneBesterKonser = await prisma.event.upsert({
+    where: { id: "helene-bester-konser-2026" },
     update: {},
     create: {
-      id: "riana-nel-konser-2026",
-      title: "Riana Nel Konser",
-      description: "'n Wonderlike aand met Riana Nel",
-      date: new Date("2026-09-19T19:00:00+02:00"),
+      id: "helene-bester-konser-2026",
+      title: "Helene Bester Konser",
+      description: "'n Onvergeetlike aand met Helene Bester by Wapadrant Gemeente. Geniet aanbidding en musiek in 'n warm, gemeenskapsgees.",
+      date: new Date("2026-11-21T19:00:00+02:00"),
       location: "Wapadrant Kerksaal, Sunriseweg 3, Olympus, Pretoria",
-      imageUrl: "/images/riana-nel-konser-2026.jpg",
+      imageUrl: "/images/helene-bester-konser-2026.jpg",
       isPublished: true,
     },
   })
 
+  // Ticket pricing confirmed soon — placeholders for now
   await prisma.ticketType.createMany({
     data: [
       {
-        eventId: rianaNelKonser.id,
+        eventId: heleneBesterKonser.id,
         name: "Volwassenes",
         price: 250.00,
         quantity: 300,
         sold: 0,
       },
       {
-        eventId: rianaNelKonser.id,
+        eventId: heleneBesterKonser.id,
         name: "Hoërskoolleerders",
         price: 150.00,
         quantity: 100,
         sold: 0,
       },
       {
-        eventId: rianaNelKonser.id,
+        eventId: heleneBesterKonser.id,
         name: "Laerskoolleerders",
         price: 50.00,
         quantity: 80,
         sold: 0,
       },
       {
-        eventId: rianaNelKonser.id,
+        eventId: heleneBesterKonser.id,
         name: "Worsbroodjies",
         price: 35.00,
         quantity: 200,
@@ -116,7 +118,7 @@ async function main() {
       },
     ],
   })
-  console.log("✅ Riana Nel Konser event en kaartjies geskep")
+  console.log("✅ Helene Bester Konser event en kaartjies geskep")
 
   // Create Ticket Types for Jeugkonferensie
   await prisma.ticketType.createMany({

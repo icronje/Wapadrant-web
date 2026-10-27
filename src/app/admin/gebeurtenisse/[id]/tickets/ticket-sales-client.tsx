@@ -88,7 +88,7 @@ export function TicketSalesClient({
         </div>
         <Button onClick={downloadCSV}>
           <Download className="mr-2 h-4 w-4" />
-          Voer uit CSV
+          Laai Kaartjie af.
         </Button>
       </div>
 

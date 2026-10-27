@@ -2,7 +2,8 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns"
-import { MessageSquare, Mail, User, Phone } from "lucide-react"
+import Link from "next/link"
+import { MessageSquare, Mail, User, Phone, Eye } from "lucide-react"
 
 const statusLabels: Record<string, string> = {
   new: "Nuut",
@@ -74,8 +75,8 @@ export default async function AdminMessages() {
               messages.map((message) => (
                 <tr key={message.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <div>
-                      <div className="flex items-center text-sm font-medium text-gray-900">
+                    <Link href={`/admin/boodskappe/${message.id}`} className="block">
+                      <div className="flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
                         <User className="w-4 h-4 mr-2 text-gray-400" />
                         {message.name}
                       </div>
@@ -89,11 +90,13 @@ export default async function AdminMessages() {
                           {message.phone}
                         </div>
                       )}
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900">{message.subject}</div>
-                    <div className="text-sm text-gray-500 truncate max-w-xs">{message.message}</div>
+                    <Link href={`/admin/boodskappe/${message.id}`}>
+                      <div className="text-sm font-medium text-gray-900">{message.subject}</div>
+                      <div className="text-sm text-gray-500 truncate max-w-xs">{message.message}</div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm text-gray-900">
@@ -110,7 +113,9 @@ export default async function AdminMessages() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {format(message.createdAt, "dd MMM yyyy")}
+                    <Link href={`/admin/boodskappe/${message.id}`} className="inline-flex items-center text-blue-600 hover:text-blue-800">
+                      <Eye className="w-4 h-4" />
+                    </Link>
                   </td>
                 </tr>
               ))

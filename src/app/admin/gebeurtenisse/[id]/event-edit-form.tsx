@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Plus, X, Calendar, MapPin, Image as ImageIcon, Save, Trash2, Ticket, TrendingUp } from "lucide-react";
+import { Plus, X, Calendar, MapPin, Image as ImageIcon, Save, Trash2, Ticket, TrendingUp, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,6 +58,7 @@ export function EventEditForm({ event, totalSold, revenue, ticketTypeSales }: Ev
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
@@ -305,7 +306,16 @@ export function EventEditForm({ event, totalSold, revenue, ticketTypeSales }: Ev
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">Beeld URL</Label>
+              <Label htmlFor="imageUrl">Beeld</Label>
+              {formData.imageUrl && (
+                <div className="mb-2 overflow-hidden rounded-lg border border-gray-200">
+                  <img
+                    src={formData.imageUrl}
+                    alt="Gebeurtenis beeld"
+                    className="h-40 w-full object-cover"
+                  />
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <ImageIcon className="h-4 w-4 text-gray-400" />
                 <Input
@@ -313,8 +323,56 @@ export function EventEditForm({ event, totalSold, revenue, ticketTypeSales }: Ev
                   type="url"
                   value={formData.imageUrl}
                   onChange={(e) => setField("imageUrl", e.target.value)}
+                  placeholder="https://... of laai op"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={isUploading}
+                  onClick={() => document.getElementById("image-upload-input")?.click()}
+                >
+                  {isUploading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Upload className="h-4 w-4" />
+                  )}
+                  <span className="ml-1">Laai Op</span>
+                </Button>
+                <input
+                  id="image-upload-input"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setIsUploading(true);
+                    try {
+                      const uploadFormData = new FormData();
+                      uploadFormData.append("file", file);
+                      const res = await fetch("/api/upload", {
+                        method: "POST",
+                        body: uploadFormData,
+                        credentials: "include",
+                      });
+                      if (res.ok) {
+                        const data = await res.json();
+                        setField("imageUrl", data.imageUrl);
+                      } else {
+                        const data = await res.json().catch(() => ({}));
+                        setErrors((prev) => ({ ...prev, imageUrl: data.error || "Kon nie beeld oplaai nie" }));
+                      }
+                    } catch {
+                      setErrors((prev) => ({ ...prev, imageUrl: "Kon nie beeld oplaai nie" }));
+                    } finally {
+                      setIsUploading(false);
+                      e.target.value = "";
+                    }
+                  }}
                 />
               </div>
+              {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl}</p>}
             </div>
 
             <div className="flex items-center gap-2">
