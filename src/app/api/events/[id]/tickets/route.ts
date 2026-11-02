@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic"
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
-import { sendTicketConfirmation } from '@/lib/email'
+import { sendTicketConfirmation, sendReservationNotification } from '@/lib/email'
 
 
 function generateReference(eventId: string): string {
@@ -181,6 +181,26 @@ export async function POST(
       console.log(`✅ E-pos bevestiging gestuur na ${buyerEmail}`)
     } catch (emailError) {
       console.error('❌ Kon nie e-pos bevestiging stuur nie:', emailError)
+      // Don't fail the purchase - just log the error
+    }
+
+    // Notify church office of new reservation
+    try {
+      await sendReservationNotification(
+        buyerName,
+        buyerEmail,
+        buyerPhone,
+        event.title,
+        result.createdTickets.reduce((sum: number, t: { quantity: number }) => sum + t.quantity, 0),
+        {
+          date: event.date.toISOString(),
+          location: event.location,
+          totalAmount: result.totalAmount,
+        }
+      )
+      console.log('✅ Bespreking kennisgewing gestuur na kantoor')
+    } catch (notifError) {
+      console.error('❌ Kon bespreking kennisgewing stuur nie:', notifError)
       // Don't fail the purchase - just log the error
     }
 

@@ -375,3 +375,105 @@ ${request}
     throw error
   }
 }
+
+/**
+ * Send ticket reservation notification to church office
+ */
+export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number } ) {
+  const { date, location, totalAmount } = eventDetails
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #e67e22; color: white; padding: 20px; text-align: center; border-radius: 8px; }
+    .content { background: #f9f9f9; padding: 30px; margin-top: 20px; border-radius: 8px; }
+    .field { margin-bottom: 15px; }
+    .label { font-weight: bold; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎫 Nuwe Kaartjie Bespreking</h1>
+    </div>
+    <div class="content">
+      <div class="field">
+        <span class="label">Koper:</span> ${buyerName}
+      </div>
+      <div class="field">
+        <span class="label">E-pos:</span> ${buyerEmail}
+      </div>
+      ${buyerPhone ? `<div class="field">
+        <span class="label">Telefoon:</span> ${buyerPhone}
+      </div>` : ''}
+      <div class="field">
+        <span class="label">Geleentheid:</span> ${eventName}
+      </div>
+      <div class="field">
+        <span class="label">Datum:</span> ${new Date(date).toLocaleDateString('af-ZA', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
+      </div>
+      <div class="field">
+        <span class="label">Ligging:</span> ${location}
+      </div>
+      <div class="field">
+        <span class="label">Kaartjies:</span> ${ticketCount}
+      </div>
+      <div class="field">
+        <span class="label">Totale Bedrag:</span> R ${totalAmount.toFixed(2)}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  `
+
+  const text = `
+Nuwe Kaartjie Bespreking
+
+Koper: ${buyerName}
+E-pos: ${buyerEmail}
+${buyerPhone ? `Telefoon: ${buyerPhone}` : ''}
+Geleentheid: ${eventName}
+Datum: ${new Date(date).toLocaleDateString('af-ZA')}
+Ligging: ${location}
+Kaartjies: ${ticketCount}
+Totale Bedrag: R ${totalAmount.toFixed(2)}
+  `.trim()
+
+  if (!transporter) {
+    console.log('📧 RESERVATION NOTIFICATION (SMTP not configured):')
+    console.log(`To: ${process.env.OFFICE_EMAIL || 'kantoor@wapadrant.co.za'}`)
+    console.log(`Cc: ${process.env.COPY_EMAIL || ''}`)
+    console.log(`Subject: Nuwe Kaartjie Bespreking - ${eventName}`)
+    console.log(text)
+    return { sent: false, reason: 'SMTP not configured' }
+  }
+
+  try {
+    await transporter.sendMail({
+      from: smtpConfig.from,
+      to: process.env.OFFICE_EMAIL || 'kantoor@wapadrant.co.za',
+      cc: process.env.COPY_EMAIL || undefined,
+      subject: `Nuwe Kaartjie Bespreking - ${eventName}`,
+      text,
+      html,
+    })
+    console.log(`✅ Bespreking kennisgewing e-pos gestuur na kantoor`)
+    return { sent: true }
+  } catch (error) {
+    console.error('❌ Kon nie bespreking kennisgewing e-pos stuur nie:', error)
+    throw error
+  }
+}
