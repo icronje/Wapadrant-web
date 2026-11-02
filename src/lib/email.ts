@@ -379,8 +379,16 @@ ${request}
 /**
  * Send ticket reservation notification to church office
  */
-export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number } ) {
-  const { date, location, totalAmount } = eventDetails
+export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number; tickets: Array<{ ticketTypeName: string; ticketPrice: number; quantity: number }> } ) {
+  const { date, location, totalAmount, tickets } = eventDetails
+
+  const ticketListHtml = tickets.map((t) => `
+      <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">${t.ticketTypeName}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">R ${t.ticketPrice.toFixed(2)}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">${t.quantity}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">R ${(t.ticketPrice * t.quantity).toFixed(2)}</td>
+      </tr>`).join('')
 
   const html = `
 <!DOCTYPE html>
@@ -430,9 +438,23 @@ export async function sendReservationNotification( buyerName: string, buyerEmail
       <div class="field">
         <span class="label">Kaartjies:</span> ${ticketCount}
       </div>
-      <div class="field">
-        <span class="label">Totale Bedrag:</span> R ${totalAmount.toFixed(2)}
-      </div>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0; background: white;">
+        <thead>
+          <tr style="background: #e67e22; color: white;">
+            <th style="padding: 10px; text-align: left;">Kaartjie Tipe</th>
+            <th style="padding: 10px; text-align: right;">Prys</th>
+            <th style="padding: 10px; text-align: center;">Aantal</th>
+            <th style="padding: 10px; text-align: right;">Subtotaal</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ticketListHtml}
+          <tr style="font-weight: bold; background: #fff3e0;">
+            <td colspan="3" style="padding: 10px; text-align: right;">TOTAAL:</td>
+            <td style="padding: 10px; text-align: right;">R ${totalAmount.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </body>
@@ -449,6 +471,10 @@ Geleentheid: ${eventName}
 Datum: ${new Date(date).toLocaleDateString('af-ZA')}
 Ligging: ${location}
 Kaartjies: ${ticketCount}
+
+Kaartjie Seleksie:
+${tickets.map(t => `- ${t.ticketTypeName}: ${t.quantity} x R ${t.ticketPrice.toFixed(2)} = R ${(t.ticketPrice * t.quantity).toFixed(2)}`).join('\n')}
+
 Totale Bedrag: R ${totalAmount.toFixed(2)}
   `.trim()
 

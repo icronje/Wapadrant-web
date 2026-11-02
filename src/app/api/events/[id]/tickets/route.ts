@@ -196,6 +196,11 @@ export async function POST(
           date: event.date.toISOString(),
           location: event.location,
           totalAmount: result.totalAmount,
+          tickets: result.createdTickets.map((t: { ticketTypeName: string; ticketPrice: number; quantity: number }) => ({
+            ticketTypeName: t.ticketTypeName,
+            ticketPrice: t.ticketPrice,
+            quantity: t.quantity,
+          })),
         }
       )
       console.log('✅ Bespreking kennisgewing gestuur na kantoor')
