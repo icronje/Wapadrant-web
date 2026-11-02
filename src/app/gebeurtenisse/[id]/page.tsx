@@ -85,16 +85,6 @@ export default async function EventDetailPage({ params }: Props) {
               />
             </div>
 
-            {event.id === "helene-bester-konser-2026" && (
-              <div className="mt-4 overflow-hidden rounded-2xl bg-muted ring-1 ring-foreground/10">
-                <img
-                  src="/images/helene-bester-2.jpeg"
-                  alt="Helene Bester"
-                  className="h-64 w-full object-cover sm:h-80 lg:h-96"
-                />
-              </div>
-            )}
-
             <div className="flex flex-col justify-center">
               <div className="mb-3 flex flex-wrap gap-2">
                 {isPast && <Badge variant="secondary">Verby</Badge>}
