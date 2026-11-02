@@ -115,7 +115,7 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
   if (confirmedTicket) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger>{children}</DialogTrigger>
+        <DialogTrigger render={children as React.ReactElement} />
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Bevestiging</DialogTitle>
@@ -144,7 +144,7 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger render={children as React.ReactElement} />
       <DialogContent className="sm:max-w-lg">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
