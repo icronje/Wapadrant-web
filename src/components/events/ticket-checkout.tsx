@@ -57,6 +57,10 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
       setError("Vul asseblief 'n geldige e-pos adres in.");
       return;
     }
+    if (!phone.trim()) {
+      setError("Vul asseblief u telefoonnommer in.");
+      return;
+    }
     if (selected.length === 0 || totalAmount <= 0) {
       setError("Kies asseblief ten minste een kaartjie.");
       return;
@@ -150,6 +154,9 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-5 py-4">
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-foreground">Jou Besonderhede</h3>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Volle naam *</Label>
@@ -173,13 +180,14 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
                 />
               </div>
               <div className="space-y-2 sm:col-span-2">
-                <Label htmlFor="phone">Telefoon</Label>
+                <Label htmlFor="phone">Telefoon *</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Byvoorbeeld: 082 123 4567"
+                  required
                 />
               </div>
             </div>
