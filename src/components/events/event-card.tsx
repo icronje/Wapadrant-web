@@ -63,7 +63,7 @@ export function EventCard({ event, showSoldBadge = true }: EventCardProps) {
         )}
       </CardContent>
       <CardFooter className="mt-auto pt-4">
-        <Link href={`/gebeurtenisse/${event.id}`}><Button className="w-full">Koop Kaartjies</Button></Link>
+        <Link href={`/gebeurtenisse/${event.id}`}><Button className="w-full">Bespreek nou</Button></Link>
       </CardFooter>
     </Card>
   );

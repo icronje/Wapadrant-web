@@ -116,7 +116,7 @@ export default async function EventDetailPage({ params }: Props) {
                   <TicketCheckout event={event}>
                     <Button size="lg">
                       <Ticket className="mr-2 h-5 w-5" />
-                      Koop Kaartjies</Button>
+                      Bespreek nou</Button>
                   </TicketCheckout>
                 </div>
               ) : hasTickets && soldOut ? (
