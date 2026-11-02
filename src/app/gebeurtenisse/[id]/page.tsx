@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TicketCheckout } from "@/components/events/ticket-checkout";
 import { TicketSelector, SelectedTicket } from "@/components/events/ticket-selector";
+import { TicketSelectorDisplay } from "@/components/events/ticket-selector-display";
 import { formatAfrikaansDate, formatZAR } from "@/lib/date-format";
 import {
   CalendarDays,
@@ -177,10 +178,8 @@ export default async function EventDetailPage({ params }: Props) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <TicketSelector
+                    <TicketSelectorDisplay
                       ticketTypes={event.ticketTypes}
-                      selected={[]}
-                      onChange={() => {}}
                     />
                   </CardContent>
                 </Card>
