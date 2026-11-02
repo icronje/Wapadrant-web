@@ -144,7 +144,7 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
       <DialogContent className="sm:max-w-lg">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Kaartjies Koop — {event.title}</DialogTitle>
+            <DialogTitle>Kaartjies Bespreek — {event.title}</DialogTitle>
             <DialogDescription>
               Vul u besonderhede in en kies u kaartjies.
             </DialogDescription>
@@ -208,7 +208,7 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
                   Verwerk...
                 </>
               ) : (
-                `Bevestig Koop — ${formatZAR(totalAmount)}`
+                `Bespreek nou — ${formatZAR(totalAmount)}`
               )}
             </Button>
           </DialogFooter>
