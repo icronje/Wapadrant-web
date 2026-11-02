@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TicketCheckout } from "@/components/events/ticket-checkout";
+import { TicketSelector, SelectedTicket } from "@/components/events/ticket-selector";
 import { formatAfrikaansDate, formatZAR } from "@/lib/date-format";
 import {
   CalendarDays,
@@ -165,26 +166,12 @@ export default async function EventDetailPage({ params }: Props) {
                       Kaartjie tipes
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    {event.ticketTypes.map((tt) => {
-                      const available = tt.quantity - (tt.sold || 0);
-                      return (
-                        <div
-                          key={tt.id}
-                          className="flex items-center justify-between rounded-lg border border-border bg-muted/40 p-3"
-                        >
-                          <div>
-                            <p className="font-medium">{tt.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {available} van {tt.quantity} oor
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold">{formatZAR(tt.price)}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                  <CardContent>
+                    <TicketSelector
+                      ticketTypes={event.ticketTypes}
+                      selected={[]}
+                      onChange={() => {}}
+                    />
                   </CardContent>
                 </Card>
               )}
