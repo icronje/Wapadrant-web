@@ -139,7 +139,7 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
             </p>
           </div>
           <DialogFooter>
-            <Button onClick={handleClose}>Goeie</Button>
+            <Button onClick={handleClose}>Dankie</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
