@@ -76,30 +76,27 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
     setIsLoading(true);
 
     try {
-      // Purchase each selected ticket type individually (API expects single ticketTypeId)
-      let lastTicket: Ticket | null = null;
-      for (const item of selected) {
-        const response = await fetch(`/api/events/${event.id}/tickets`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+      const response = await fetch(`/api/events/${event.id}/tickets`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          buyerName: name,
+          buyerEmail: email,
+          buyerPhone: phone,
+          items: selected.map((item) => ({
             ticketTypeId: item.ticketTypeId,
-            buyerName: name,
-            buyerEmail: email,
-            buyerPhone: phone,
             quantity: item.quantity,
-          }),
-        });
+          })),
+        }),
+      });
 
-        if (!response.ok) {
-          const data = await response.json().catch(() => ({}));
-          throw new Error(data.error || "Kon nie kaartjie koop nie");
-        }
-
-        lastTicket = await response.json();
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Kon nie kaartjie koop nie");
       }
 
-      setConfirmedTicket(lastTicket);
+      const result = await response.json();
+      setConfirmedTicket(result.tickets?.[0] ?? null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Onbekende fout. Probeer weer.");
     } finally {
