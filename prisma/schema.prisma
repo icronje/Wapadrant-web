@@ -54,8 +54,19 @@ model Ticket {
   buyerPhone String?
   quantity   Int
   totalAmount Decimal  @db.Decimal(10, 2)
+  reference  String?  // ticket reference number (e.g. WPR-eventid-XXXXXX)
   status     String   @default("confirmed") // confirmed, cancelled, refunded
   createdAt  DateTime @default(now())
+}
+
+model EmailLog {
+  id         String   @id @default(cuid())
+  ticketId   String?  // link to ticket if applicable
+  reference  String?  // reference number
+  recipient  String   // email address sent to
+  subject    String   // email subject
+  body       String   // email body (text version)
+  sentAt     DateTime @default(now())
 }
 
 model Sermon {
