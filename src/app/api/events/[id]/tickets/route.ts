@@ -61,21 +61,21 @@ export async function POST(
     // Validate required fields
     if (!buyerName) {
       return NextResponse.json(
-        { error: 'Naam is vereis' },
+        { error: 'Verskaf asb. jou naam' },
         { status: 400 }
       )
     }
 
     if (!buyerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) {
       return NextResponse.json(
-        { error: 'Geldige e-pos adres is vereis' },
+        { error: 'Verskaf asb. \'n geldige e-posadres' },
         { status: 400 }
       )
     }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
-        { error: 'Ten minste een kaartjie item is vereis' },
+        { error: 'Kies ten minste een kaartjie.' },
         { status: 400 }
       )
     }
