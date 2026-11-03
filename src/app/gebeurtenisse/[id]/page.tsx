@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TicketCheckout } from "@/components/events/ticket-checkout";
-import { TicketSelector, SelectedTicket } from "@/components/events/ticket-selector";
-import { TicketSelectorDisplay } from "@/components/events/ticket-selector-display";
 import { formatAfrikaansDate, formatZAR } from "@/lib/date-format";
 import {
   CalendarDays,
@@ -159,22 +157,6 @@ export default async function EventDetailPage({ params }: Props) {
             </div>
 
             <div className="space-y-6">
-              {hasTickets && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Ticket className="h-5 w-5 text-primary" />
-                      Kaartjie tipes
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <TicketSelectorDisplay
-                      ticketTypes={event.ticketTypes}
-                    />
-                  </CardContent>
-                </Card>
-              )}
-
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
