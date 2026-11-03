@@ -124,7 +124,7 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
           <DialogHeader>
             <DialogTitle>Bevestiging</DialogTitle>
             <DialogDescription>
-              U kaartjie vir {event.title} is suksesvol bespreek.
+              'n Epos met verdere inligting is gestuur na {confirmedTicket.buyerEmail}.
             </DialogDescription>
           </DialogHeader>
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
@@ -135,7 +135,6 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
               #{confirmedTicket.id.slice(-8).toUpperCase()}
             </p>
             <p className="mt-3 text-sm">
-              'n Bevestiging is gestuur na {confirmedTicket.buyerEmail}.
             </p>
           </div>
           <DialogFooter>
