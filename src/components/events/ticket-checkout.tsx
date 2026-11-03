@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -40,6 +40,13 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
     },
     0
   );
+
+  // Clear error when user changes ticket selection
+  useEffect(() => {
+    if (error && selected.length > 0) {
+      setError("");
+    }
+  }, [selected, error]);
 
   function isValidEmail(value: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
