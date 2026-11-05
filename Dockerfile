@@ -6,7 +6,6 @@ FROM node:22-bookworm-slim AS base
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gnupg \
-    libc6-compat \
     openssl \
     ca-certificates \
     && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg \
@@ -69,6 +68,7 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/package-lock.json* ./package-lock.json*
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/next.config* ./
 
 # Entrypoint script — starts PostgreSQL, runs migrations, then starts app
