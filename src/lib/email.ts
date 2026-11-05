@@ -38,6 +38,7 @@ export async function sendTicketConfirmation(
     buyerName: string
     tickets: Array<{
       reference: string
+      reservation_reference: string | null
       ticketTypeName: string
       ticketPrice: number
       quantity: number
@@ -83,7 +84,7 @@ export async function sendTicketConfirmation(
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎫 Bespreking - Verwysing: ${tickets[0]?.reference || ''}</h1>
+      <h1>🎫 Bespreking - ${tickets[0]?.reservation_reference || ''}</h1>
     </div>
     <div class="content">
       <p>Goeie dag, ${buyerName}</p>
@@ -164,7 +165,7 @@ Wapadrant Gemeente
   if (!transporter) {
     console.log('📧 TICKET CONFIRMATION EMAIL (SMTP not configured):')
     console.log(`To: ${email}`)
-    console.log(`Subject: Jou Kaartjie Bevestiging - ${eventName} - Verwysing: ${tickets[0]?.reference || ''}`)
+    console.log(`Subject: Jou Kaartjie Bevestiging - ${eventName} - Bespreking: ${tickets[0]?.reservation_reference || ''}`)
     console.log(text)
     return { sent: false, reason: 'SMTP not configured' }
   }
@@ -173,7 +174,7 @@ Wapadrant Gemeente
     await transporter.sendMail({
       from: smtpConfig.from,
       to: email,
-      subject: `Jou Kaartjie Bevestiging - ${eventName} - Verwysing: ${tickets[0]?.reference || ''}`,
+      subject: `Jou Kaartjie Bevestiging - ${eventName} - Bespreking: ${tickets[0]?.reservation_reference || ''}`,
       text,
       html,
     })
@@ -380,8 +381,8 @@ ${request}
 /**
  * Send ticket reservation notification to church office
  */
-export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number; reference?: string; tickets: Array<{ ticketTypeName: string; ticketPrice: number; quantity: number }> } ) {
-  const { date, location, totalAmount, tickets, reference } = eventDetails
+export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number; reference?: string; reservation_reference?: string | null; tickets: Array<{ ticketTypeName: string; ticketPrice: number; quantity: number }> } ) {
+  const { date, location, totalAmount, tickets, reference, reservation_reference } = eventDetails
 
   const ticketListHtml = tickets.map((t) => `
       <tr>
@@ -408,7 +409,7 @@ export async function sendReservationNotification( buyerName: string, buyerEmail
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎫 Nuwe Bespreking - Verwysing: ${reference || ''}</h1>
+      <h1>🎫 Nuwe Bespreking - ${reservation_reference || ''}</h1>
     </div>
     <div class="content">
       <div class="field">
@@ -483,7 +484,7 @@ Totale Bedrag: R ${totalAmount.toFixed(2)}
     console.log('📧 RESERVATION NOTIFICATION (SMTP not configured):')
     console.log(`To: ${process.env.OFFICE_EMAIL || 'kantoor@wapadrant.co.za'}`)
     console.log(`Cc: ${process.env.COPY_EMAIL || ''}`)
-    console.log(`Subject: Nuwe Bespreking - ${eventName} - Verwysing: ${reference || ''}`)
+    console.log(`Subject: Nuwe Bespreking - ${eventName} - Bespreking: ${reservation_reference || ''}`)
     console.log(text)
     return { sent: false, reason: 'SMTP not configured' }
   }
@@ -493,7 +494,7 @@ Totale Bedrag: R ${totalAmount.toFixed(2)}
       from: smtpConfig.from,
       to: process.env.OFFICE_EMAIL || 'kantoor@gkwapadrant.co.za',
       cc: process.env.COPY_EMAIL || undefined,
-      subject: `Nuwe Bespreking - ${eventName} - Verwysing: ${reference || ''}`,
+      subject: `Nuwe Bespreking - ${eventName} - Bespreking: ${reservation_reference || ''}`,
       text,
       html,
     })

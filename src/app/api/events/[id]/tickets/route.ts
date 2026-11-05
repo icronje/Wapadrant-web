@@ -212,6 +212,7 @@ export async function POST(
           location: event.location,
           totalAmount: result.totalAmount,
           reference: result.createdTickets[0]?.reference || '',
+          reservation_reference: result.createdTickets[0]?.reservation_reference || '',
           tickets: result.createdTickets.map((t: { ticketTypeName: string; ticketPrice: number; quantity: number }) => ({
             ticketTypeName: t.ticketTypeName,
             ticketPrice: t.ticketPrice,
