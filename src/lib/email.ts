@@ -83,12 +83,13 @@ export async function sendTicketConfirmation(
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎫 Kaartjie Bevestiging</h1>
+      <h1>🎫 Bespreking - Verwysing: ${tickets[0]?.reference || ''}</h1>
     </div>
     <div class="content">
-      <p>Goeiemôre ${buyerName},</p>
+      <p>Goeie dag, ${buyerName}</p>
       
-      <p>Dankie vir jou kaartjie(s)! Hier is jou bevestiging:</p>
+      <p>Dankie vir jou belangstelling! Hier is jou bevestiging:</p>
+      <p>Die kerkkantoor sal binnekort in verbinding wees vir betaling.</p>
       
       <h3>${eventName}</h3>
       <p>
@@ -124,7 +125,7 @@ export async function sendTicketConfirmation(
       
       <p><strong>Belangrik:</strong> Bring asseblief jou verwysingsnommer(s) wanneer jy by die geleentheid aankom.</p>
       
-      <p>Ons sien uit daarna om jou te sien!</p>
+      <p>Ons sien daarna uit om jou te sien!</p>
       
       <p>Groete,<br>
       <strong>Wapadrant Gemeente</strong></p>
@@ -139,9 +140,9 @@ export async function sendTicketConfirmation(
   `
 
   const text = `
-Goeiemôre ${buyerName},
+Goeie dag, ${buyerName}
 
-Dankie vir jou kaartjie(s)! Hier is jou bevestiging:
+Dankie vir jou bespreking! Hier is jou bevestiging:
 
 ${eventName}
 Datum: ${new Date(eventDate).toLocaleDateString('af-ZA')}
@@ -163,7 +164,7 @@ Wapadrant Gemeente
   if (!transporter) {
     console.log('📧 TICKET CONFIRMATION EMAIL (SMTP not configured):')
     console.log(`To: ${email}`)
-    console.log(`Subject: Jou Kaartjie Bevestiging - ${eventName}`)
+    console.log(`Subject: Jou Kaartjie Bevestiging - ${eventName} - Verwysing: ${tickets[0]?.reference || ''}`)
     console.log(text)
     return { sent: false, reason: 'SMTP not configured' }
   }
@@ -172,7 +173,7 @@ Wapadrant Gemeente
     await transporter.sendMail({
       from: smtpConfig.from,
       to: email,
-      subject: `Jou Kaartjie Bevestiging - ${eventName}`,
+      subject: `Jou Kaartjie Bevestiging - ${eventName} - Verwysing: ${tickets[0]?.reference || ''}`,
       text,
       html,
     })
@@ -202,7 +203,7 @@ export async function sendContactNotification(
 
   const typeLabels: Record<string, string> = {
     general: 'Algemene Navraag',
-    prayer: 'Gebed Versoek',
+    prayer: 'Gebedversoek',
     volunteer: 'Vrywilliger',
   }
 
@@ -274,14 +275,14 @@ ${message}
     await transporter.sendMail({
       from: smtpConfig.from,
       to: email,
-      subject: `Nuwe Kontak Boodskap - ${subject}`,
+      subject: `Nuwe Boodskap - ${subject}`,
       text,
       html,
     })
-    console.log(`✅ Kontak boodskap e-pos gestuur na ${email}`)
+    console.log(`✅ E-pos gestuur na ${email}`)
     return { sent: true }
   } catch (error) {
-    console.error('❌ Kon nie kontak boodskap e-pos stuur nie:', error)
+    console.error('❌ Kon nie E-pos stuur nie:', error)
     throw error
   }
 }
@@ -318,7 +319,7 @@ export async function sendPrayerRequestNotification(
 <body>
   <div class="container">
     <div class="header">
-      <h1>🙏 Gebed Versoek</h1>
+      <h1>🙏 Gebedversoek</h1>
     </div>
     <div class="content">
       <div class="field">
@@ -329,7 +330,7 @@ export async function sendPrayerRequestNotification(
       </div>
       ${phone ? `<div class="field"><span class="label">Telefoon:</span> ${phone}</div>` : ''}
       <div class="prayer">
-        <strong>Gebed Versoek:</strong><br>
+        <strong>Gebedversoek:</strong><br>
         ${request.replace(/\n/g, '<br>')}
       </div>
       <p style="margin-top: 20px; font-style: italic;">"Die gebed van 'n regverdige het groot krag." - Jakobus 5:16</p>
@@ -340,13 +341,13 @@ export async function sendPrayerRequestNotification(
   `
 
   const text = `
-Gebed Versoek
+Gebedversoek
 
 Naam: ${name}
 E-pos: ${fromEmail}
 ${phone ? `Telefoon: ${phone}` : ''}
 
-Gebed Versoek:
+Gebedversoek:
 ${request}
 
 "Die gebed van 'n regverdige het groot krag." - Jakobus 5:16
@@ -368,10 +369,10 @@ ${request}
       text,
       html,
     })
-    console.log(`✅ Gebed versoek e-pos gestuur na ${email}`)
+    console.log(`✅ Gebedversoek e-pos gestuur na ${email}`)
     return { sent: true }
   } catch (error) {
-    console.error('❌ Kon nie gebed versoek e-pos stuur nie:', error)
+    console.error('❌ Kon nie gebedversoek e-pos stuur nie:', error)
     throw error
   }
 }
@@ -379,8 +380,8 @@ ${request}
 /**
  * Send ticket reservation notification to church office
  */
-export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number; tickets: Array<{ ticketTypeName: string; ticketPrice: number; quantity: number }> } ) {
-  const { date, location, totalAmount, tickets } = eventDetails
+export async function sendReservationNotification( buyerName: string, buyerEmail: string, buyerPhone: string | undefined, eventName: string, ticketCount: number, eventDetails: { date: string; location: string; totalAmount: number; reference?: string; tickets: Array<{ ticketTypeName: string; ticketPrice: number; quantity: number }> } ) {
+  const { date, location, totalAmount, tickets, reference } = eventDetails
 
   const ticketListHtml = tickets.map((t) => `
       <tr>
@@ -407,7 +408,7 @@ export async function sendReservationNotification( buyerName: string, buyerEmail
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎫 Nuwe Kaartjie Bespreking</h1>
+      <h1>🎫 Nuwe Bespreking - Verwysing: ${reference || ''}</h1>
     </div>
     <div class="content">
       <div class="field">
@@ -462,7 +463,7 @@ export async function sendReservationNotification( buyerName: string, buyerEmail
   `
 
   const text = `
-Nuwe Kaartjie Bespreking
+Nuwe Bespreking
 
 Koper: ${buyerName}
 E-pos: ${buyerEmail}
@@ -472,7 +473,7 @@ Datum: ${new Date(date).toLocaleDateString('af-ZA')}
 Ligging: ${location}
 Kaartjies: ${ticketCount}
 
-Kaartjie Seleksie:
+Kaartjiekeuse:
 ${tickets.map(t => `- ${t.ticketTypeName}: ${t.quantity} x R ${t.ticketPrice.toFixed(2)} = R ${(t.ticketPrice * t.quantity).toFixed(2)}`).join('\n')}
 
 Totale Bedrag: R ${totalAmount.toFixed(2)}
@@ -482,7 +483,7 @@ Totale Bedrag: R ${totalAmount.toFixed(2)}
     console.log('📧 RESERVATION NOTIFICATION (SMTP not configured):')
     console.log(`To: ${process.env.OFFICE_EMAIL || 'kantoor@wapadrant.co.za'}`)
     console.log(`Cc: ${process.env.COPY_EMAIL || ''}`)
-    console.log(`Subject: Nuwe Kaartjie Bespreking - ${eventName}`)
+    console.log(`Subject: Nuwe Bespreking - ${eventName} - Verwysing: ${reference || ''}`)
     console.log(text)
     return { sent: false, reason: 'SMTP not configured' }
   }
@@ -490,16 +491,16 @@ Totale Bedrag: R ${totalAmount.toFixed(2)}
   try {
     await transporter.sendMail({
       from: smtpConfig.from,
-      to: process.env.OFFICE_EMAIL || 'kantoor@wapadrant.co.za',
+      to: process.env.OFFICE_EMAIL || 'kantoor@gkwapadrant.co.za',
       cc: process.env.COPY_EMAIL || undefined,
-      subject: `Nuwe Kaartjie Bespreking - ${eventName}`,
+      subject: `Nuwe Bespreking - ${eventName} - Verwysing: ${reference || ''}`,
       text,
       html,
     })
-    console.log(`✅ Bespreking kennisgewing e-pos gestuur na kantoor`)
+    console.log(`✅ E-pos gestuur na kantoor`)
     return { sent: true }
   } catch (error) {
-    console.error('❌ Kon nie bespreking kennisgewing e-pos stuur nie:', error)
+    console.error('❌ Kon nie besprekings e-pos stuur nie:', error)
     throw error
   }
 }
