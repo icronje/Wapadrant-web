@@ -55,6 +55,7 @@ model Ticket {
   quantity   Int
   totalAmount Decimal  @db.Decimal(10, 2)
   reference  String?  // ticket reference number (e.g. WPR-eventid-XXXXXX)
+  reservation_reference String? // shared reservation reference for all tickets in one booking
   status     String   @default("confirmed") // confirmed, cancelled, refunded
   createdAt  DateTime @default(now())
 }
