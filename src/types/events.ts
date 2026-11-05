@@ -17,6 +17,7 @@ export interface Ticket {
   quantity: number;
   totalAmount: number;
   status: "confirmed" | "cancelled" | "refunded";
+  reference: string | null;
   createdAt: string;
   ticketType: TicketType;
 }

@@ -129,10 +129,10 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
           </DialogHeader>
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
             <p className="text-sm text-muted-foreground">
-              Kaartjie verwysing nommer:
+              Kaartjie verwysingsnommer:
             </p>
             <p className="mt-1 font-mono text-lg font-semibold text-primary">
-              #{confirmedTicket.id.slice(-8).toUpperCase()}
+              #{confirmedTicket.reference}
             </p>
             <p className="mt-3 text-sm">
             </p>
