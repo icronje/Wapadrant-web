@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgresql://wapadrant:wapadrant@localhost:5432/wapadrant?schema=public
+    container_name: wapadrant-web
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://wapadrant:wapadrant@localhost:5432/wapadrant?schema=public
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-change-me-in-production}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3100}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      OFFICE_EMAIL: ${OFFICE_EMAIL:-}
+      COPY_EMAIL: ${COPY_EMAIL:-}
+    ports:
+      - "3100:3100"
+    volumes:
+      - wapadrant-pg-data:/var/lib/postgresql/data
+
+volumes:
+  wapadrant-pg-data:
