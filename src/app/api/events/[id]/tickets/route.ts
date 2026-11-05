@@ -14,6 +14,15 @@ function generateReference(eventId: string): string {
   return `WPR-${eventId}-${suffix}`
 }
 
+function generateReservationReference(eventId: string): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let suffix = ''
+  for (let i = 0; i < 6; i++) {
+    suffix += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return `RES-${eventId}-${suffix}`
+}
+
 
 export async function GET(
   request: NextRequest,
@@ -108,6 +117,9 @@ export async function POST(
       )
     }
 
+    // Generate ONE reservation reference for the entire booking
+    const reservationReference = generateReservationReference(eventId)
+
     // Process purchase in transaction
     const result = await prisma.$transaction(async (tx) => {
       const createdTickets = []
@@ -146,6 +158,7 @@ export async function POST(
             quantity: item.quantity,
             totalAmount: itemTotal,
             reference,
+            reservation_reference: reservationReference,
             status: 'confirmed',
           },
         })
@@ -161,6 +174,7 @@ export async function POST(
         createdTickets.push({
           ...ticket,
           reference,
+          reservation_reference: reservationReference,
           ticketTypeName: ticketType.name,
           ticketPrice: ticketType.price.toNumber(),
         })

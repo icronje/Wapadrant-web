@@ -16,6 +16,7 @@ export interface Ticket {
   buyerPhone: string | null;
   quantity: number;
   totalAmount: number;
+  reference: string | null;
   status: "confirmed" | "cancelled" | "refunded";
   reservation_reference: string | null;
   createdAt: string;
