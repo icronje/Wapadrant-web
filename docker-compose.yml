@@ -14,13 +14,13 @@ services:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-change-me-in-production}
       NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3100}
       API_BASE_URL: http://localhost:3100
-      SMTP_HOST: ${SMTP_HOST:-}
-      SMTP_PORT: ${SMTP_PORT:-465}
-      SMTP_USER: ${SMTP_USER:-}
-      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
-      SMTP_FROM: ${SMTP_FROM:-}
-      OFFICE_EMAIL: ${OFFICE_EMAIL:-}
-      COPY_EMAIL: ${COPY_EMAIL:-}
+      SMTP_HOST: mail.gkwapadrant.co.za
+      SMTP_PORT: "465"
+      SMTP_USER: besprekings@gkwapadrant.co.za
+      SMTP_PASSWORD: RogerAlice@72
+      SMTP_FROM: "Wapadrant Gemeente <besprekings@gkwapadrant.co.za>"
+      OFFICE_EMAIL: kantoor@gkwapadrant.co.za
+      COPY_EMAIL: pieter@arbstorage.co.za, uitreik@gkwapadrant.co.za
     ports:
       - "3100:3100"
     volumes:
