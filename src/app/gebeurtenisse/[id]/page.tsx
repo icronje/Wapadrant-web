@@ -24,7 +24,7 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-const API_BASE = process.env.API_BASE_URL ?? "http://localhost:3101";
+const API_BASE = "";
 
 async function getEvent(id: string): Promise<Event | null> {
   try {
