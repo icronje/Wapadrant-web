@@ -18,7 +18,7 @@ export const metadata = {
 
 async function getEvents(): Promise<Event[]> {
   try {
-    const res = await fetch(`${process.env.API_BASE_URL ?? ""}/api/events`, {
+    const res = await fetch(`${process.env.API_BASE_URL ?? "http://localhost:3101"}/api/events`, {
       cache: "no-store",
     });
     if (!res.ok) return [];
