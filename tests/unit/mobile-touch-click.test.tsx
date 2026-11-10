@@ -28,6 +28,7 @@ const mockEvent: Event = {
   imageUrl: "/images/helene-bester-3.jpeg",
   createdAt: "2026-01-01T00:00:00.000Z",
   updatedAt: "2026-01-01T00:00:00.000Z",
+  isPublished: true,
   ticketTypes: [
     { id: "tt1", name: "Adults", price: 250, quantity: 100, sold: 0, eventId: "e1" },
   ],
