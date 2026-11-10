@@ -31,8 +31,12 @@ async function generateUniqueReservationReference(): Promise<string> {
       where: { reservation_reference: ref },
       select: { id: true },
     })
-    if (!existing) return ref
-    ref = generateReservationReference()
+    if (existing) {
+      ref = generateReservationReference()
+    }
+    else {
+     return ref
+    }
     attempts++
   }
   return ref

@@ -130,18 +130,10 @@ export function TicketCheckout({ event, children }: TicketCheckoutProps) {
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-3">
             <div>
               <p className="text-sm text-muted-foreground">
-                Bespreking verwysingsnommer:
+                Besprekingsverwysingsnommer:
               </p>
               <p className="mt-1 font-mono text-lg font-semibold text-primary">
                 #{confirmedTicket.reservation_reference}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">
-                Kaartjie verwysingsnommer:
-              </p>
-              <p className="mt-1 font-mono text-sm font-medium text-primary">
-                #{confirmedTicket.reference}
               </p>
             </div>
           </div>
