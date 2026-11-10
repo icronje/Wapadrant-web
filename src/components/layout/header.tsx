@@ -73,7 +73,7 @@ export function Header() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+                  className="touch-manipulation px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -83,7 +83,7 @@ export function Header() {
               <div className="relative">
                 <button
                   onClick={() => setMeerOpen(!meerOpen)}
-                  className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+                  className="touch-manipulation flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
                 >
                   Meer
                   <ChevronDown className={cn("h-4 w-4 transition-transform", meerOpen && "rotate-180")} />
@@ -114,7 +114,7 @@ export function Header() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 -mr-2 text-foreground hover:text-primary transition-colors"
+              className="lg:hidden touch-manipulation p-2 -mr-2 text-foreground hover:text-primary transition-colors"
               aria-label="Maak navigasie oop"
             >
               <Menu className="h-6 w-6" />
@@ -157,7 +157,7 @@ export function Header() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-base font-medium text-foreground/90 hover:bg-accent hover:text-primary rounded-md transition-colors"
+                  className="touch-manipulation px-4 py-3 text-base font-medium text-foreground/90 hover:bg-accent hover:text-primary rounded-md transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -171,7 +171,7 @@ export function Header() {
                   key={child.label}
                   href={child.href}
                   onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-base text-muted-foreground hover:bg-accent hover:text-primary rounded-md transition-colors"
+                  className="touch-manipulation px-4 py-3 text-base text-muted-foreground hover:bg-accent hover:text-primary rounded-md transition-colors"
                 >
                   {child.label}
                 </Link>
