@@ -13,7 +13,7 @@ describe("Issue #15 Task 2: Disable ALL other menu options except Bespreek Helen
       const navLinksContent = navLinksMatch[1];
       const entries = navLinksContent.split("},\n").filter((e) => e.trim().length > 0);
       for (const entry of entries) {
-        if (entry.includes("Bespreek Helene Kaartjie")) {
+        if (entry.includes("Bespreek Helene Kaartjie") || entry.includes("Webwerf")) {
           expect(entry).not.toContain("disabled: true");
         } else {
           expect(entry).toContain("disabled: true");

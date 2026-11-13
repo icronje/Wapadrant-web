@@ -7,7 +7,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Container } from "./container";
 
-type NavLink = { label: string; href: string; disabled?: boolean };
+type NavLink = { label: string; href: string; disabled?: boolean; external?: boolean };
 
 const navLinks: NavLink[] = [
   { label: "Bespreek Helene Kaartjie", href: "/gebeurtenisse/helene-bester-konsert-2026" },
@@ -15,6 +15,7 @@ const navLinks: NavLink[] = [
   { label: "Eredienste", href: "/eredienste", disabled: true },
   { label: "Ontdek Jou Plek", href: "/ontdek-jou-plek", disabled: true },
   { label: "Dien Met Gawes", href: "/dien-met-gawes", disabled: true },
+  { label: "Webwerf", href: "https://gkwapadrant.co.za", external: true },
 ];
 
 const meerLinks: NavLink[] = [
@@ -80,6 +81,16 @@ export function Header() {
                   >
                     {link.label}
                   </span>
+                ) : link.external ? (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="touch-manipulation px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </a>
                 ) : (
                   <Link
                     key={link.label}
@@ -174,6 +185,17 @@ export function Header() {
                   >
                     {link.label}
                   </span>
+                ) : link.external ? (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileOpen(false)}
+                    className="touch-manipulation px-4 py-3 text-base font-medium text-foreground/90 hover:bg-accent hover:text-primary rounded-md transition-colors"
+                  >
+                    {link.label}
+                  </a>
                 ) : (
                   <Link
                     key={link.label}
