@@ -7,19 +7,21 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Container } from "./container";
 
-const navLinks = [
+type NavLink = { label: string; href: string; disabled?: boolean };
+
+const navLinks: NavLink[] = [
   { label: "Bespreek Helene Kaartjie", href: "/gebeurtenisse/helene-bester-konsert-2026" },
-  { label: "Neem Kennis", href: "/neem-kennis" },
-  { label: "Eredienste", href: "/eredienste" },
-  { label: "Ontdek Jou Plek", href: "/ontdek-jou-plek" },
-  { label: "Dien Met Gawes", href: "/dien-met-gawes" },
+  { label: "Neem Kennis", href: "/neem-kennis", disabled: true },
+  { label: "Eredienste", href: "/eredienste", disabled: true },
+  { label: "Ontdek Jou Plek", href: "/ontdek-jou-plek", disabled: true },
+  { label: "Dien Met Gawes", href: "/dien-met-gawes", disabled: true },
 ];
 
-const meerLinks = [
-  { label: "Kontak Ons", href: "/kontak-ons" },
-  { label: "Foto Albums", href: "/foto-albums" },
-  { label: "Gebeurtenisse", href: "/gebeurtenisse" },
-  { label: "Argief", href: "/argief" },
+const meerLinks: NavLink[] = [
+  { label: "Kontak Ons", href: "/kontak-ons", disabled: true },
+  { label: "Foto Albums", href: "/foto-albums", disabled: true },
+  { label: "Gebeurtenisse", href: "/gebeurtenisse", disabled: true },
+  { label: "Argief", href: "/argief", disabled: true },
 ];
 
 export function Header() {
@@ -69,21 +71,32 @@ export function Header() {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="touch-manipulation px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) =>
+                link.disabled ? (
+                  <span
+                    key={link.label}
+                    className="px-3 py-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed pointer-events-none"
+                    aria-disabled="true"
+                  >
+                    {link.label}
+                  </span>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="touch-manipulation px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
 
-              {/* Meer dropdown */}
+              {/* Meer dropdown — disabled */}
               <div className="relative">
                 <button
-                  onClick={() => setMeerOpen(!meerOpen)}
-                  className="touch-manipulation flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+                  disabled
+                  className="touch-manipulation flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted-foreground/50 cursor-not-allowed pointer-events-none"
+                  aria-disabled="true"
                 >
                   Meer
                   <ChevronDown className={cn("h-4 w-4 transition-transform", meerOpen && "rotate-180")} />
@@ -152,29 +165,38 @@ export function Header() {
             </div>
             {/* Nav links */}
             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="touch-manipulation px-4 py-3 text-base font-medium text-foreground/90 hover:bg-accent hover:text-primary rounded-md transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) =>
+                link.disabled ? (
+                  <span
+                    key={link.label}
+                    className="px-4 py-3 text-base font-medium text-muted-foreground/50 cursor-not-allowed pointer-events-none"
+                    aria-disabled="true"
+                  >
+                    {link.label}
+                  </span>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="touch-manipulation px-4 py-3 text-base font-medium text-foreground/90 hover:bg-accent hover:text-primary rounded-md transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
               <div className="my-2 border-t" />
               <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Meer
               </div>
               {meerLinks.map((child) => (
-                <Link
+                <span
                   key={child.label}
-                  href={child.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="touch-manipulation px-4 py-3 text-base text-muted-foreground hover:bg-accent hover:text-primary rounded-md transition-colors"
+                  className="px-4 py-3 text-base text-muted-foreground/50 cursor-not-allowed pointer-events-none"
+                  aria-disabled="true"
                 >
                   {child.label}
-                </Link>
+                </span>
               ))}
             </nav>
           </div>

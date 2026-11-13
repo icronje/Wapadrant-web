@@ -23,7 +23,7 @@ describe("Issue #15 Task 1: Change Tuis menu to Bespreek Helene Kaartjie", () =>
   it("Bespreek Helene Kaartjie must be in the main navLinks array (not meerLinks)", () => {
     // Extract the navLinks array content
     const navLinksMatch = source.match(
-      /const navLinks = \[([\s\S]*?)\];/
+      /const navLinks(?:: NavLink\[\])? = \[([\s\S]*?)\];/
     );
     expect(navLinksMatch).not.toBeNull();
     if (navLinksMatch) {
