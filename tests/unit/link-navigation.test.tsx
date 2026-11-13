@@ -71,8 +71,8 @@ describe("Issue #11: Links must not cancel native navigation on mobile", () => {
     // Verify mobile menu is open
     expect(screen.getByLabelText("Maak navigasie toe")).toBeTruthy();
 
-    // Click the first nav link (Tuis)
-    const tuisLink = screen.getAllByRole("link").find(l => l.textContent === "Tuis");
+    // Click the first nav link (Bespreek Helene Kaartjie)
+    const tuisLink = screen.getAllByRole("link").find(l => l.textContent === "Bespreek Helene Kaartjie");
     expect(tuisLink).toBeTruthy();
 
     // The click should go through (not prevented)
@@ -80,7 +80,7 @@ describe("Issue #11: Links must not cancel native navigation on mobile", () => {
     expect(clickResult).toBeTruthy();
 
     // The href should still be present (navigation not cancelled)
-    expect(tuisLink!.getAttribute("href")).toBe("/");
+    expect(tuisLink!.getAttribute("href")).toBe("/gebeurtenisse/helene-bester-konsert-2026");
   });
 
   it("kontak-ons form submit preventDefault must NOT affect link navigation", () => {

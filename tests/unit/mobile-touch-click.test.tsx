@@ -93,7 +93,7 @@ describe("Issue #11: Mobile touch/click event handling", () => {
       render(<Header />);
       fireEvent.click(screen.getByLabelText("Maak navigasie oop"));
       const navLinks = screen.getAllByRole("link");
-      const tuisLink = navLinks.find(l => l.textContent === "Tuis");
+      const tuisLink = navLinks.find(l => l.textContent === "Bespreek Helene Kaartjie");
       expect(tuisLink).toBeTruthy();
       const clickResult = fireEvent.click(tuisLink!);
       expect(clickResult).toBeTruthy();

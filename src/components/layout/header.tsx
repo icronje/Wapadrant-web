@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Container } from "./container";
 
 const navLinks = [
-  { label: "Tuis", href: "/" },
+  { label: "Bespreek Helene Kaartjie", href: "/gebeurtenisse/helene-bester-konsert-2026" },
   { label: "Neem Kennis", href: "/neem-kennis" },
   { label: "Eredienste", href: "/eredienste" },
   { label: "Ontdek Jou Plek", href: "/ontdek-jou-plek" },
