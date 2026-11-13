@@ -12,7 +12,6 @@ import { formatAfrikaansDate, formatZAR } from "@/lib/date-format";
 import {
   CalendarDays,
   MapPin,
-  ArrowLeft,
   Ticket,
   CheckCircle2,
 } from "lucide-react";
@@ -68,18 +67,12 @@ export default async function EventDetailPage({ params }: Props) {
     <div className="flex flex-1 flex-col">
       <section className="bg-church-pattern py-12 sm:py-16">
         <Container>
-          <Link href="/gebeurtenisse">
-            <Button variant="ghost" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Terug na Gebeurtenisse
-            </Button>
-          </Link>
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="overflow-hidden rounded-2xl bg-muted ring-1 ring-foreground/10">
               <img
                 src={event.id === "helene-bester-konsert-2026" ? "/images/helene-bester-4.jpeg" : event.imageUrl && event.imageUrl !== "/images/placeholder-event.svg" ? event.imageUrl : PLACEHOLDER_SVG}
                 alt={event.title}
-                className="h-64 w-full object-cover sm:h-80 lg:h-1/2"
+                className="h-64 w-full object-cover sm:h-80 lg:h-full"
               />
             </div>
 
