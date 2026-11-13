@@ -10,12 +10,12 @@ import { Container } from "./container";
 type NavLink = { label: string; href: string; disabled?: boolean; external?: boolean };
 
 const navLinks: NavLink[] = [
+  { label: "Webwerf", href: "https://gkwapadrant.co.za", external: true },
   { label: "Bespreek Helene Kaartjie", href: "/gebeurtenisse/helene-bester-konsert-2026" },
   { label: "Neem Kennis", href: "/neem-kennis", disabled: true },
   { label: "Eredienste", href: "/eredienste", disabled: true },
   { label: "Ontdek Jou Plek", href: "/ontdek-jou-plek", disabled: true },
   { label: "Dien Met Gawes", href: "/dien-met-gawes", disabled: true },
-  { label: "Webwerf", href: "https://gkwapadrant.co.za", external: true },
 ];
 
 const meerLinks: NavLink[] = [
