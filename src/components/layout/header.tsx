@@ -59,7 +59,7 @@ export function Header() {
         <Container>
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 shrink-0 focus:outline-none">
+            <a href="https://gkwapadrant.co.za" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 shrink-0 focus:outline-none">
               <Image
                 src="/wapadrant-logo.jpg"
                 alt="Wapadrant Gemeente"
@@ -68,7 +68,7 @@ export function Header() {
                 className="h-[60px] w-auto object-contain"
                 priority
               />
-            </Link>
+            </a>
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1">
